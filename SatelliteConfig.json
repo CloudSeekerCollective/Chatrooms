@@ -1,9 +1,0 @@
-{
-	"port": "7778",
-	"mysql_username": "root",
-	"mysql_password": "rL_3UlKhna*nHTZ2",
-	"etc_configs_path": "/opt/lampp/htdocs/serverproperties.json",
-	"cert_path": "/etc/letsencrypt/live/populartopplingjelly.ezwebsites.com/fullchain.pem",
-	"pkey_path": "/etc/letsencrypt/live/populartopplingjelly.ezwebsites.com/privkey.pem",
-	"debug_mode": false
-}
