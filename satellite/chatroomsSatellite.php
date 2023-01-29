@@ -101,8 +101,8 @@ class Chatroom implements MessageComponentInterface {
 									$this->clients->detach($conn);
 									$conn->close();
 								}
-								// make sure the user isnt already online
-								if($lfdu_RSLT['is_online'] != "1"){
+								// TODO: make sure the user isnt already online
+								//if($lfdu_RSLT['is_online'] != "1"){
 									// if the server has email verification...
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
@@ -134,15 +134,15 @@ class Chatroom implements MessageComponentInterface {
 											}
 										}
 										// make them appear as online
-										$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='1' WHERE `authentication`='". $utoken ."'");
+										//$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='1' WHERE `authentication`='". $utoken ."'");
 									}
-								}
+								/*}
 								else{
 									echo("[Satellite] 1User already online! Disconnecting.\n");
 									$conn->send('{"status":"fail", "error":"user_already_online"}');
 									$this->clients->detach($conn);
 									$conn->close();
-								}
+								}*/
 							}
 							else{
 								echo("[Satellite] 1User is disallowed to join the Chatroom for now! Disconnecting.\n");
