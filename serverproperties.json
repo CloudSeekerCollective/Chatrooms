@@ -1,0 +1,16 @@
+{
+	"server_name":"New Chatroom",
+	"welcome_message": "Welcome to my new Chatroom!",
+	"allow_anonymous":false,
+	"save_messages":true,
+	"system_channel": "1",
+	"localhost_lock":false,
+	"load_all_history_if_any":false,
+	"content_id":10000,
+	"require_email":false,
+	"allow_registrations":true,
+	"chatroom": "yourserver.example.org",
+	"chatroom_port": "7778",
+	"filesize_limit": "50000000",
+	"emotes": []
+}
