@@ -21,7 +21,7 @@ class Chatroom implements MessageComponentInterface {
 	public function __construct() {
 		echo("Welcome to the Chatrooms Experience!\n
       Chatrooms is a free, open source and lightweight chat platform where anyone can host a space for their friends, people and even family to hang out.
-    Copyright (C) 20". time("y") ."  Team CloudSeeker (Popular Toppling Jelly/Teodor Boshkoski and GeofTheCake)\n\n
+    Copyright (C) 20". date("y") ."  Team CloudSeeker (Popular Toppling Jelly/Teodor Boshkoski and GeofTheCake)\n\n
 
     This program is free software: you can redistribute it and/or modify\n
     it under the terms of the GNU General Public License as published by\n
