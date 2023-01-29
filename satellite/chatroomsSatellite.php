@@ -12,7 +12,7 @@ use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
 use React\Socket\Server;
 use React\Socket\SecureServer;
-require_once './vendor/autoload.php';
+require_once '../bin/vendor/autoload.php';
 
 class Chatroom implements MessageComponentInterface {
 	protected $clients;
