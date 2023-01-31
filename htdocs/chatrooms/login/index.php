@@ -7,7 +7,7 @@
 	}*/
 	//include("ip.php");
 
-	if(empty($_COOKIE['authentication'])){
+	/*if(empty($_COOKIE['authentication'])){
 		header("Server: CloudSeeker");
 		$h = "MissingAccount";
 		//header("Server: CloudSeeker");
@@ -15,7 +15,7 @@
 	else{
 		header("Server: CloudSeeker");
 		header("Location: /chatrooms/wa/");
-	}
+	}*/
 
 	if(!empty($_POST['Ltoken']) and !empty($_POST['account_renewal_confirm'])){
 		// isolate the user creds
