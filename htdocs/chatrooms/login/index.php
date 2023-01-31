@@ -61,7 +61,7 @@
 		// otherwise...
 		else{
 			// return warning telling the client that the user is unexistent
-			header("Location: login.php?loginfail&reason=An internal server error occured, please try again");
+			header("Location: ./?loginfail&reason=An internal server error occured, please try again");
 		}
 		//header("Location: login.php?loginfail&reason=This feature has been permanently disabled");
 	}
@@ -95,15 +95,18 @@
 		$strings = mysqli_fetch_assoc($lfdu);
 		$attempts = 1;
 		$stop = false;
+		$reason = "Passwords do not match!";
 		while($accounts = mysqli_fetch_assoc($lfdu)) {
 			echo("+");
 			if($username == $accounts['username']){
 				$stop = true;
+				$reason = 'Username already taken!';
 				header("Location: ./?loginfail&reason=Username already taken!");
 			}
 			else{
 				if($username == "System"){
 					$stop = true;
+					$reason = "You will be impersonating the System in your dreams.";
 					header("Location: ./?loginfail&reason=You will be impersonating the System in your dreams.");
 				}
 			}
@@ -120,7 +123,7 @@
 			}		
 		}
 		else{
-			header("Location: login.php?loginfail&reason=Passwords do not match!");
+			header("Location: ./?loginfail&reason=". $reason);
 		}
 		//header("Location: login.php?loginfail&reason=This feature has been permanently disabled");
 	}
