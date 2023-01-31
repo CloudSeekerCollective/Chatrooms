@@ -102,7 +102,10 @@
 				header("Location: ./?loginfail&reason=Username already taken!");
 			}
 			else{
-				$stop = false;
+				if($username == "System"){
+					$stop = true;
+					header("Location: ./?loginfail&reason=You will be impersonating the System in your dreams.");
+				}
 			}
   		}
 		if($stop == false and $password == $passwordconfirm){
