@@ -146,7 +146,7 @@
 	<img src='/assets/wavingfella.png' width='256' height='256'>
 	<h1>Check Your Email!</h1>
 	<p>You should be expecting an email with the key that you need to insert to verify your email.</p>
-	<form action='2fa_step2.php' method='POST'>
+	<form method='POST'>
       		<div class="form-floating mb-3 mt-3">
      			<input type="text" min='6' max='6' class="form-control" id="LUSER" placeholder="Enter key..." name="Lkey">
       			<label>Key</label>
