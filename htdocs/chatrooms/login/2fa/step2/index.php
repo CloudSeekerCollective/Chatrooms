@@ -37,12 +37,12 @@
 					header("Location: /chatrooms/login/success.php");
 				}
 				else{
-					header("Location: /chatrooms/login/step2/?loginfail&reason=Incorrect 2fa code!");
+					header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=Incorrect 2fa code!");
 				}
 			}
 			else{
 				// return warning telling the client that the user is unexistent
-				header("Location: /chatrooms/login/step2/?loginfail&reason=Incorrect 2fa code!");
+				header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=Incorrect 2fa code!");
 			}
 		}
 		else{
