@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <?php 
-	$ctds = mysqli_connect("localhost", "root", "rL_3UlKhna*nHTZ2", "chrms_universe");
-	$scpath = file_get_contents("/opt/lampp/htdocs/serverproperties.json");
-	$serverconfig = json_decode($scpath, true);
+	include("../../api/chatrooms/connect.php");
+	header("Content-Type: text/html");
 	if($serverconfig['require_email'] == false){
 		header("Location: /chatrooms/login/success.php");
 	} 
@@ -153,7 +152,7 @@
 		</div>
   		<input type="submit" name='email_confirm' value='Accept' class="btn btn-primary btn-block">
       	</form>
-	<form action='2fa_step2.php' method='POST'>
+	<form action='./' method='POST'>
 		<input type="submit" name='email_resend' value='Resend Email' class="btn btn-secondary btn-block">
 	</form>
 </center>
