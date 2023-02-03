@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
-	$ctds = mysqli_connect("localhost", "root", "rL_3UlKhna*nHTZ2", "chrms_universe");
-	$scpath = file_get_contents("/opt/lampp/htdocs/serverproperties.json");
+	include("../../api/chatrooms/connect.php");
+	header("Content-Type: text/html");
 	$serverconfig = json_decode($scpath, true);
 	if($serverconfig['require_email'] == false){
 		header("Location: /chatrooms/login/success.php");
