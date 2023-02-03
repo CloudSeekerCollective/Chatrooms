@@ -39,7 +39,7 @@
 				$headers = "From: system@chatrooms.epicgamer.org";
 
 				mail($to,$subject,$txt,$headers);
-				header("Location: /chatrooms/login/step2/?loginfail&reason=A 2FA code has been sent to your email. Check your inbox or spam folder!");
+				header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=A 2FA code has been sent to your email. Check your inbox or spam folder!");
 			}
 		}
 		else{
