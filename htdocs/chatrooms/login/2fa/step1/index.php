@@ -112,7 +112,7 @@
 	<img src='/assets/wavingfella.png' width='256' height='256'>
 	<h1>Verify Your Email!</h1>
 	<p>To continue to this Chatroom, you must verify your email. Insert your email here to do that.</p>
-	<form action='2fa_step1.php' method='POST'>
+	<form method='POST'>
       		<div class="form-floating mb-3 mt-3">
      			<input type="email" class="form-control" id="LUSER" placeholder="Enter email..." name="Lemail">
       			<label>Email</label>
