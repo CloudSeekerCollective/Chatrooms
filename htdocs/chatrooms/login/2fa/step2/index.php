@@ -71,16 +71,16 @@
 				$headers = "From: system@chatrooms.epicgamer.org";
 
 				mail($to,$subject,$txt,$headers);
-				header("Location: /chatrooms/login/step2/?loginfail&reason=A 2FA code has been sent to your email. Check your inbox or spam folder!");
+				header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=A 2FA code has been sent to your email. Check your inbox or spam folder!");
 			}
 			else{
 				// return warning telling the client that the user is unexistent
-				header("Location: /chatrooms/login/step2/?loginfail&reason=The account you're trying to verify doesn't exist!");
+				header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=The account you're trying to verify doesn't exist!");
 			}
 		}
 		else{
 			// return warning telling the client that the user is unexistent
-			header("Location: /chatrooms/login/step2/?loginfail&reason=The account you're trying to verify doesn't exist!");
+			header("Location: /chatrooms/login/2fa/step2/?loginfail&reason=The account you're trying to verify doesn't exist!");
 		}
 	}
 	//header("Location: login.php?loginfail&reason=This feature has been permanently disabled");
