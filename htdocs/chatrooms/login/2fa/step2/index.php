@@ -7,7 +7,7 @@
 	} 
 	//include("ip.php");
 
-	if(empty($_COOKIE['authentication'])){
+	/*if(empty($_COOKIE['authentication'])){
 		header("Server: CloudSeeker");
 		header("Location: login.php");
 	}
@@ -15,7 +15,7 @@
 
 		header("Server: CloudSeeker");
 		$h = "MissingAccount";
-	}
+	}*/
 
 	if(!empty($_POST['Lkey']) and !empty($_POST['email_confirm'])){
 		// isolate the user creds
