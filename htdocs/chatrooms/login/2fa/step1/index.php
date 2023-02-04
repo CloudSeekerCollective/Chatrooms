@@ -8,7 +8,7 @@
 	} 
 	//include("ip.php");
 
-	if(empty($_COOKIE['authentication'])){
+	/*if(empty($_COOKIE['authentication'])){
 		header("Server: CloudSeeker");
 		header("Location: /chatrooms/login/");
 	}
@@ -16,7 +16,7 @@
 
 		header("Server: CloudSeeker");
 		$h = "MissingAccount";
-	}
+	}*/
 	
 	if(!empty($_POST['email_restart'])){
 		// lfdu = look for da user
