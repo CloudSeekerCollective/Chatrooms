@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php 
-	include("../../api/chatrooms/connect.php");
+	include("../../../../api/chatrooms/connect.php");
 	header("Content-Type: text/html");
 	if($serverconfig['require_email'] == false){
 		header("Location: /chatrooms/login/success.php");
