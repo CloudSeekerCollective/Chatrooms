@@ -19,7 +19,8 @@ class Chatroom implements MessageComponentInterface {
 	// protected $users;
 
 	public function __construct() {
-		echo("Welcome to the Chatrooms Experience! (Compiled on 29/01/2023)\n
+		$GLOBALS['redeclaration'] = false;
+		echo("Welcome to the Chatrooms Experience! (Compiled on 08/02/2023)\n
       Chatrooms is a free, open source and lightweight chat platform where anyone can host a space for their friends, people and even family to hang out.
     Copyright (C) 20". date("y") ."  Team CloudSeeker (Popular Toppling Jelly/Teodor Boshkoski and GeofTheCake)\n
 
@@ -291,6 +292,8 @@ class Chatroom implements MessageComponentInterface {
 	}
 
 	public function onMessage(ConnectionInterface $from,  $data) {
+		//use function extraStuff/message_intent;
+		//use function extraStuff/edit_intent;
 		// get satellite configuration
 		$configpath = file_get_contents("./SatelliteConfig.json");
 		// parse it
@@ -313,7 +316,10 @@ class Chatroom implements MessageComponentInterface {
 		);
 		// data sent from the client is MOST LIKELY json, so parse it
 		$dataset = json_decode($data, true);
-		// if theres a message and/or an attachment...
+		switch(stripslashes(htmlspecialchars($dataset['type']))){
+			case "message":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
 		if(!empty($dataset['message']) or !empty($dataset['attachment1'])){
 			// DEPRECATED: connectionlist will be removed in a future release
 			/*if($dataset['message'] == "/SATELLITE connectionlist"){
@@ -358,6 +364,7 @@ class Chatroom implements MessageComponentInterface {
 						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 						$emkeyscount = 0;
 						$actual_mesg = $mesg;
+						$mid = mt_rand(10000001, 99999999);
 						/* DEPRECATED: server-side emote processing, will be removed in a future release
 						foreach($emotelist as $emotelist2){
 							$emotekeys = array_keys($emotelist);
@@ -385,12 +392,12 @@ class Chatroom implements MessageComponentInterface {
 							}
 							if($greenlight == true){
 								// if the result is successful...
-								$from->send('{"status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
+								$from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
 								if($lfdu_RSLT['status'] != "STAGING"){
 									if($serverconfig['save_messages'] == true){
 										// insert into 'messages' table
 										echo("[Satellite] Message saved\n");
-										$query = "INSERT INTO `messages`(`author`, `content`, `channel`, `date`, `number`, `attachment1`) VALUES ('". $id ."',  '". $actual_mesg ."', '". $chnl ."', '". time() ."', '1', '". $attach1 ."')";  
+										$query = "INSERT INTO `messages`(`author`, `content`, `channel`, `date`, `number`, `attachment1`) VALUES ('". $id ."',  '". $actual_mesg ."', '". $chnl ."', '". time() ."', '". $mid ."', '". $attach1 ."')";  
 										// TODO implement this: DELETE FROM `messages` WHERE `number`='512';   
 		        							$submit = mysqli_query($ctds, $query);
 									}
@@ -411,7 +418,7 @@ class Chatroom implements MessageComponentInterface {
 											}
 										}
 										if($greenlight == true){
-											$client->send('{"status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
+											$client->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
 											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully sent!\n");
 										}
 										else{
@@ -431,11 +438,227 @@ class Chatroom implements MessageComponentInterface {
 					}	
 				}
 			}
+		
+			break;
+			case "edit": 
+			if(!empty($dataset['message']) and !empty($dataset['msgid'])){
+			// isolate information
+			$mesg = stripslashes(htmlspecialchars($dataset['message']));
+			$chnl = stripslashes(htmlspecialchars($dataset['msgid']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
+						$lfdc = mysqli_query($ctds, "SELECT * FROM `channels` WHERE `id`='". $chnl ."'");
+						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
+						$channel_allowed = json_decode($lfdc_RSLT['allowed_roles']);
+						$userroles = json_decode($lfdu_RSLT['roles']);
+						$greenlight = false;
+						// isolate username, user ID
+						$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
+						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
+						$emkeyscount = 0;
+						$actual_mesg = $mesg;
+
+						$lfdm = mysqli_query($ctds, "SELECT `author` FROM `messages` WHERE `number`='". $chnl ."'");
+						$lfdm_RSLT = mysqli_fetch_assoc($lfdm);
+							// COMING SOON, will be correctly implemented in a future release
+							/*if(!empty($channel_allowed[0]) and $lfdm_RSLT['author'] != $id){
+								for($i = 0; $i >= $userroles; $i++){
+									if($userroles[$i] == $channel_allowed){
+										$greenlight = true;
+									}
+									else{
+										$greenlight = false;
+									}
+								}
+							}
+							else{
+								$greenlight = true;
+							}*/
+							if($lfdm_RSLT['author'] != $id){
+								$greenlight = false;
+							}
+							else{
+								$greenlight = true;
+							}
+
+							if($greenlight == true){
+								// if the result is successful...
+								$from->send('{"action":"edit", "status":"success", "user":"'. $usrnm .'", "msgid":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
+								if($lfdu_RSLT['status'] != "STAGING"){
+									if($serverconfig['save_messages'] == true){
+										// insert into 'messages' table
+										echo("[Satellite] Message edit saved\n");
+										$query = "UPDATE `messages` SET `content`='". $actual_mesg ."' WHERE `number`='". $chnl ."'";    
+		        							$submit = mysqli_query($ctds, $query);
+									}
+								}
+								foreach($this->clients as $client) {
+									if($from!=$client) {
+										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $utoken ."'");
+										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
+										$userrolesS = json_decode($lfduS_RSLT['roles']);
+										for($i = 0; $i >= $userrolesS; $i++){
+											echo($userrolesS . " " . $channel_allowed . "\n");
+											if($userrolesS[$i] == $channel_allowed){
+												$greenlight = true;
+											}
+											else{
+												$greenlight = false;
+											}
+										}
+										if($greenlight == true){
+											$client->send('{"action":"edit", "status":"success", "user":"'. $usrnm .'", "msgid":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
+											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully edited!\n");
+										}
+										else{
+											// do nothing. lol
+											echo("");
+										}
+									}
+								}
+							}
+							else{
+								echo("");
+							}
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
+			case "delete": 
+			if(!empty($dataset['message']) and !empty($dataset['msgid'])){
+			// isolate information
+			$chnl = stripslashes(htmlspecialchars($dataset['msgid']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
+						$lfdc = mysqli_query($ctds, "SELECT * FROM `channels` WHERE `id`='". $chnl ."'");
+						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
+						$channel_allowed = json_decode($lfdc_RSLT['allowed_roles']);
+						$userroles = json_decode($lfdu_RSLT['roles']);
+						$greenlight = false;
+						// isolate username, user ID
+						$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
+						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
+						$emkeyscount = 0;
+						$actual_mesg = $mesg;
+
+						$lfdm = mysqli_query($ctds, "SELECT `author` FROM `messages` WHERE `number`='". $chnl ."'");
+						$lfdm_RSLT = mysqli_fetch_assoc($lfdm);
+							// COMING SOON, will be correctly implemented in a future release
+							/*if(!empty($channel_allowed[0]) and $lfdm_RSLT['author'] != $id){
+								for($i = 0; $i >= $userroles; $i++){
+									if($userroles[$i] == $channel_allowed){
+										$greenlight = true;
+									}
+									else{
+										$greenlight = false;
+									}
+								}
+							}
+							else{
+								$greenlight = true;
+							}*/
+							if($lfdm_RSLT['author'] != $id){
+								$greenlight = false;
+							}
+							else{
+								$greenlight = true;
+							}
+
+							if($greenlight == true){
+								// if the result is successful...
+								$from->send('{"action":"delete", "status":"success", "msgid":"'. $chnl .'","time":"'. time() .'"}');
+								if($lfdu_RSLT['status'] != "STAGING"){
+									if($serverconfig['save_messages'] == true){
+										// insert into 'messages' table
+										echo("[Satellite] Message deletion saved\n");
+										$query = "DELETE FROM `messages` WHERE `number`='". $chnl ."'";    
+		        							$submit = mysqli_query($ctds, $query);
+									}
+								}
+								foreach($this->clients as $client) {
+									if($from!=$client) {
+										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $utoken ."'");
+										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
+										$userrolesS = json_decode($lfduS_RSLT['roles']);
+										for($i = 0; $i >= $userrolesS; $i++){
+											echo($userrolesS . " " . $channel_allowed . "\n");
+											if($userrolesS[$i] == $channel_allowed){
+												$greenlight = true;
+											}
+											else{
+												$greenlight = false;
+											}
+										}
+										if($greenlight == true){
+											$client->send('{"action":"delete", "status":"success", "msgid":"'. $chnl .'","time":"'. time() .'"}');
+											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully deleted!\n");
+										}
+										else{
+											// do nothing. lol
+											echo("");
+										}
+									}
+								}
+							}
+							else{
+								echo("");
+							}
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
+			default:
+				// uhm excuse me what the fuck
+				echo("[Satellite] User request could not be determined\n");
+			break;
 		}
+	}
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		$conn->close();
+		echo("ERROR! ". $e ."\n");
 	}
 }
+
 /* use this code instead if u DON'T want an encrypted connection:
 
 $server = new Ratchet\App('?', 7778, '0.0.0.0');
