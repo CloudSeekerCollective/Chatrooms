@@ -243,7 +243,7 @@ class Chatroom implements MessageComponentInterface {
 											// announce departure
 											foreach($this->clients as $client) {
 												if($conn!=$client) {
-													$client->send('{"action":"leave","status":"success", "user":"System", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"' .  stripslashes(htmlspecialchars($lfdu_RSLT['username'])) . ' has left the Chat :(","time":"'. time() .'", "attachment1":""}');
+													$client->send('{"action":"leave","status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"has left the Chat :(","time":"'. time() .'", "attachment1":""}');
 												}
 											}
 											// make user appear as offline
