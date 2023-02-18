@@ -112,7 +112,7 @@ class Chatroom implements MessageComponentInterface {
 											// allow the user to join
 											foreach($this->clients as $client) {
 												if($conn!=$client) {
-													$client->send('{"status":"success", "user":"System", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"' .  stripslashes(htmlspecialchars($lfdu_RSLT['username'])) . ' has joined the Chat!","time":"'. time() .'", "attachment1":""}');
+													$client->send('{"action":"join","status":"success", "user":"System", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"' .  stripslashes(htmlspecialchars($lfdu_RSLT['username'])) . ' has joined the Chat!","time":"'. time() .'", "attachment1":""}');
 												}
 											}
 											// make them appear as online
@@ -243,7 +243,7 @@ class Chatroom implements MessageComponentInterface {
 											// announce departure
 											foreach($this->clients as $client) {
 												if($conn!=$client) {
-													$client->send('{"status":"success", "user":"System", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"' .  stripslashes(htmlspecialchars($lfdu_RSLT['username'])) . ' has left the Chat :(","time":"'. time() .'", "attachment1":""}');
+													$client->send('{"action":"leave","status":"success", "user":"System", "channel":"'. $serverconfig['system_channel'] .'", "uid":"0", "msg":"' .  stripslashes(htmlspecialchars($lfdu_RSLT['username'])) . ' has left the Chat :(","time":"'. time() .'", "attachment1":""}');
 												}
 											}
 											// make user appear as offline
