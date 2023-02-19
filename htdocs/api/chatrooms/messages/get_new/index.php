@@ -44,7 +44,7 @@
 						}
 						// is there a first message? yes? good. add it to the list
 						$returnjson = array(array("id" => $lfdc_RSLT['number'], "author" => $lfdc_RSLT['author'], "channel" => $lfdc_RSLT['channel'], "content" => stripslashes(htmlspecialchars($lfdc_RSLT['content'])), "date" => $lfdc_RSLT['date'], "username" => $first_authoruname, "attachment1" => $lfdc_RSLT['attachment1']));		
-						$rewind = 256;
+						$rewind = 1;
 						// repeat this for every other message		
 						while($row = mysqli_fetch_assoc($lfdc)) {
 							// isolate properties
