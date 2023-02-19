@@ -74,7 +74,7 @@
 											"username" => $authoruname, 
 											"attachment1" => $attach1
 									       );
-							$rewind--;
+							$rewind++;
 			  			}
 						// return the results to the client				
 						echo(json_encode($returnjson));
