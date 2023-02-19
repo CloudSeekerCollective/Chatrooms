@@ -19,7 +19,7 @@
 				if(!empty($_POST['channel'])){
 					// lfdc = look for da channel
 					// TODO: ORDER BY `messages`.`date` DESC 
-					$lfdc = mysqli_query($ctds, "SELECT * FROM `messages` WHERE `channel`='". $_POST['channel'] ."' LIMIT 128");
+					$lfdc = mysqli_query($ctds, "SELECT * FROM `messages` WHERE `channel`='". $_POST['channel'] ."' ORDER BY `messages`.`date` DESC LIMIT 256");
 				}
 				else{
 					die();
@@ -44,7 +44,7 @@
 						}
 						// is there a first message? yes? good. add it to the list
 						$returnjson = array(array("id" => $lfdc_RSLT['number'], "author" => $lfdc_RSLT['author'], "channel" => $lfdc_RSLT['channel'], "content" => stripslashes(htmlspecialchars($lfdc_RSLT['content'])), "date" => $lfdc_RSLT['date'], "username" => $first_authoruname, "attachment1" => $lfdc_RSLT['attachment1']));		
-						$rewind = 1;
+						$rewind = 256;
 						// repeat this for every other message		
 						while($row = mysqli_fetch_assoc($lfdc)) {
 							// isolate properties
@@ -74,7 +74,7 @@
 											"username" => $authoruname, 
 											"attachment1" => $attach1
 									       );
-							$rewind++;
+							$rewind--;
 			  			}
 						// return the results to the client				
 						echo(json_encode($returnjson));
