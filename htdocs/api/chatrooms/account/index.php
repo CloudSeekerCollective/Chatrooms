@@ -28,7 +28,7 @@
 						$utoken = stripslashes(htmlspecialchars($_POST['token']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `creationdate` FROM `accounts` WHERE `authentication`='". $utoken ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `picture`, `creationdate` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
@@ -40,10 +40,11 @@
 								$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
 								$actualuid = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
+								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$cdate = stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", $lfdu_RSLT['creationdate'])));
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
+								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
 							else{
