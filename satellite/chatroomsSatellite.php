@@ -647,6 +647,36 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
+			case "editprofile": 
+			if(!empty($dataset['pfp'])){
+			// isolate information
+			$pfp = stripslashes(htmlspecialchars($dataset['pfp']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+							// if the result is successful...
+							$from->send('{"action":"editprofile", "status":"success"}');
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `picture`='". $pfp ."' WHERE `authentication`='". $auth ."'");
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
 			default:
 				// uhm excuse me what the fuck
 				echo("[Satellite] User request could not be determined\n");
