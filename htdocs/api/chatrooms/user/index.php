@@ -28,7 +28,7 @@
 						$uid = stripslashes(htmlspecialchars($_POST['id']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `creationdate` FROM `accounts` WHERE `id`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate` FROM `accounts` WHERE `id`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
