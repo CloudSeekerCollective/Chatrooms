@@ -708,6 +708,7 @@ class Chatroom implements MessageComponentInterface {
 					}	
 				}
 			}
+			break;
 			case "editprofile->status": 
 			if(!empty($dataset['status'])){
 			// isolate information
