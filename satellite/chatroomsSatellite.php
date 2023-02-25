@@ -699,8 +699,20 @@ class Chatroom implements MessageComponentInterface {
 					// if the authentication matches a user...
 						if(mysqli_num_rows($lfdu) != 0){
 							// if the result is successful...
-							$from->send('{"action":"editprofile", "status":"success"}');
-							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `username`='". $username ."' WHERE `authentication`='". $auth ."'");
+							$dupelfdu = mysqli_query($ctds, 'SELECT `username` FROM `accounts`');
+							$strings = mysqli_fetch_assoc($dupelfdu);
+							while($accounts = mysqli_fetch_assoc($dupelfdu)) {
+								if($username == $accounts['username']){
+									echo("[Satellite] Username already taken! Aborting.");
+								}
+								elseif($username == "System"){
+									echo("[Satellite] Username is 'System'! Aborting.");
+								}
+								else{
+									$from->send('{"action":"editprofile", "status":"success"}');
+									$lfdu = mysqli_query($ctds, "UPDATE `accounts` SET `username`='". $username ."' WHERE `authentication`='". $auth ."'");
+								}
+  							}
 						}
 					}
 					else{
