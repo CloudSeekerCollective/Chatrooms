@@ -28,7 +28,7 @@
 						$utoken = stripslashes(htmlspecialchars($_POST['token']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `picture`, `creationdate` FROM `accounts` WHERE `authentication`='". $utoken ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `profilestatus`, `picture`, `creationdate` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
