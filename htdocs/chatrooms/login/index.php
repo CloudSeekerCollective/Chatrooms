@@ -97,7 +97,6 @@
 		$stop = false;
 		$reason = "Passwords do not match!";
 		while($accounts = mysqli_fetch_assoc($lfdu)) {
-			echo("+");
 			if($username == $accounts['username']){
 				$stop = true;
 				$reason = 'Username already taken!';
