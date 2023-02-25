@@ -41,7 +41,7 @@
 								$actualuid = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
-								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus'])); .""
+								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", $lfdu_RSLT['creationdate'])));
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
