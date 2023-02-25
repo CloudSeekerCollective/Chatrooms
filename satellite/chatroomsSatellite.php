@@ -649,7 +649,7 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
-			case "editprofile->picture": 
+			case "editprofile:picture": 
 			if(!empty($dataset['pfp'])){
 			// isolate information
 			$pfp = stripslashes(htmlspecialchars($dataset['pfp']));
@@ -679,7 +679,7 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
-			case "editprofile->username": 
+			case "editprofile:username": 
 			if(!empty($dataset['username'])){
 			// isolate information
 			$username = stripslashes(htmlspecialchars($dataset['username']));
@@ -709,7 +709,7 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
-			case "editprofile->status": 
+			case "editprofile:status": 
 			if(!empty($dataset['status'])){
 			// isolate information
 			$status = stripslashes(htmlspecialchars($dataset['status']));
