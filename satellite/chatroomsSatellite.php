@@ -513,6 +513,7 @@ class Chatroom implements MessageComponentInterface {
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
 										$userrolesS = json_decode($lfduS_RSLT['roles']);
+										/* TODO: Implement later
 										for($i = 0; $i >= $userrolesS; $i++){
 											echo($userrolesS . " " . $channel_allowed . "\n");
 											if($userrolesS[$i] == $channel_allowed){
@@ -521,7 +522,8 @@ class Chatroom implements MessageComponentInterface {
 											else{
 												$greenlight = false;
 											}
-										}
+										}*/
+										$greenlight = true;
 										if($greenlight == true){
 											$client->send('{"action":"edit", "status":"success", "user":"'. $usrnm .'", "msgid":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
 											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully edited!\n");
@@ -647,7 +649,7 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
-			case "editprofile": 
+			case "editprofile->picture": 
 			if(!empty($dataset['pfp'])){
 			// isolate information
 			$pfp = stripslashes(htmlspecialchars($dataset['pfp']));
@@ -669,6 +671,65 @@ class Chatroom implements MessageComponentInterface {
 							// if the result is successful...
 							$from->send('{"action":"editprofile", "status":"success"}');
 							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `picture`='". $pfp ."' WHERE `authentication`='". $auth ."'");
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
+			case "editprofile->username": 
+			if(!empty($dataset['username'])){
+			// isolate information
+			$username = stripslashes(htmlspecialchars($dataset['username']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+							// if the result is successful...
+							$from->send('{"action":"editprofile", "status":"success"}');
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `username`='". $username ."' WHERE `authentication`='". $auth ."'");
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			case "editprofile->status": 
+			if(!empty($dataset['status'])){
+			// isolate information
+			$status = stripslashes(htmlspecialchars($dataset['status']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+							// if the result is successful...
+							$from->send('{"action":"editprofile", "status":"success"}');
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `profilestatus`='". $status ."' WHERE `authentication`='". $auth ."'");
 						}
 					}
 					else{
