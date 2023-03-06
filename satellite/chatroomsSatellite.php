@@ -517,7 +517,6 @@ class Chatroom implements MessageComponentInterface {
 						echo('{"status":"authfail"}');
 					}	
 				}
-			}
 		
 			break;
 			case "edit": 
