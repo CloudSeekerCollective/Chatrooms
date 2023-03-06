@@ -468,7 +468,6 @@ class Chatroom implements MessageComponentInterface {
 						$nm = stripslashes(htmlspecialchars($lfdc_RSLT['name']));
 						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 						$emkeyscount = 0;
-						$actual_mesg = $mesg;
 						$mid = mt_rand(10000001, 99999999);
 						/* DEPRECATED: server-side emote processing, will be removed in a future release
 						foreach($emotelist as $emotelist2){
@@ -482,19 +481,7 @@ class Chatroom implements MessageComponentInterface {
 							$emkeyscount++;
 						}*/
 							// COMING SOON, will be correctly implemented in a future release
-							if(!empty($channel_allowed[0])){
-								for($i = 0; $i >= $userroles; $i++){
-									if($userroles[$i] == $channel_allowed){
-										$greenlight = true;
-									}
-									else{
-										$greenlight = false;
-									}
-								}
-							}
-							else{
-								$greenlight = true;
-							}
+							$greenlight = true;
 							if($greenlight == true){
 								// if the result is successful...
 								// $from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
