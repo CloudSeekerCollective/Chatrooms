@@ -492,7 +492,7 @@ class Chatroom implements MessageComponentInterface {
 									}
 								}
 								foreach($lfdc_RSLT as $channel) {
-									$from->send('{"action":"channel","status":"success", "name":"'. $nm .'", "id":"'. $id .'"}');
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
 								}
 							}
 							else{
