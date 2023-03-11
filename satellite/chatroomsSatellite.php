@@ -491,9 +491,21 @@ class Chatroom implements MessageComponentInterface {
 										echo("[Satellite] ???\n");
 									}
 								}
-								foreach($lfdc_RSLT as $channel) {
-									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
+					
+								// if there is no error...
+								if(!is_bool($lfdc)){
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($lfdc_RSLT['name'] .'", "id":"'. stripslashes(htmlspecialchars($lfdc_RSLT['id']) .'"}');
+									$rewind = 1;				
+									while($row = mysqli_fetch_assoc($lfdc)) {
+										$actualid = stripslashes(htmlspecialchars($row['id']));
+										$name = stripslashes(htmlspecialchars($row['name']));
+										$from->send('{"action":"channel","status":"success", "name":"'. $name .'", "id":"'. $actualid .'"}');
+										$rewind++;
+			  						}						
 								}
+								/*foreach($lfdc_RSLT as $channel) {
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
+								}*/
 							}
 							else{
 								echo("");
