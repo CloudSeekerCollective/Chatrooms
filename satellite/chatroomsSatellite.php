@@ -518,6 +518,84 @@ class Chatroom implements MessageComponentInterface {
 				}
 		
 			break;
+			case "vchannel":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
+						$lfdc = mysqli_query($ctds, "SELECT * FROM `vchannels`");
+						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
+						$channel_allowed = json_decode($lfdc_RSLT['allowed_roles']);
+						$userroles = json_decode($lfdu_RSLT['roles']);
+						$greenlight = false;
+						// isolate username, user ID
+						$nm = stripslashes(htmlspecialchars($lfdc_RSLT['name']));
+						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
+						$emkeyscount = 0;
+						$mid = mt_rand(10000001, 99999999);
+						/* DEPRECATED: server-side emote processing, will be removed in a future release
+						foreach($emotelist as $emotelist2){
+							$emotekeys = array_keys($emotelist);
+							if($emkeyscount == 0){
+								$actual_mesg = str_replace($emotekeys[$emkeyscount], addslashes('<img src="'. stripslashes(htmlspecialchars($emotelist2)) .'" width="32" height="32">'), $mesg);
+							}
+							else{
+								$actual_mesg = str_replace($emotekeys[$emkeyscount], addslashes('<img src="'. stripslashes(htmlspecialchars($emotelist2)) .'" width="32" height="32">'), $actual_mesg);
+							}
+							$emkeyscount++;
+						}*/
+							// COMING SOON, will be correctly implemented in a future release
+							$greenlight = true;
+							if($greenlight == true){
+								// if the result is successful...
+								// $from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
+								if($lfdu_RSLT['status'] != "STAGING"){
+									if($serverconfig['save_messages'] == true){
+										// insert into 'messages' table
+										echo("[Satellite] ???\n");
+									}
+								}
+					
+								// if there is no error...
+								if(!is_bool($lfdc)){
+									$from->send('{"action":"vchannel","status":"success", "name":"'. stripslashes(htmlspecialchars($lfdc_RSLT['name'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdc_RSLT['id'])) .'"}');
+									$rewind = 1;				
+									while($row = mysqli_fetch_assoc($lfdc)) {
+										$actualid = stripslashes(htmlspecialchars($row['id']));
+										$name = stripslashes(htmlspecialchars($row['name']));
+										$from->send('{"action":"vchannel","status":"success", "name":"'. $name .'", "id":"'. $actualid .'"}');
+										$rewind++;
+			  						}						
+								}
+								/*foreach($lfdc_RSLT as $channel) {
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
+								}*/
+							}
+							else{
+								echo("");
+							}
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+		
+			break;
 			case "edit": 
 			if(!empty($dataset['message']) and !empty($dataset['msgid'])){
 			// isolate information
