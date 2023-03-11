@@ -494,7 +494,7 @@ class Chatroom implements MessageComponentInterface {
 					
 								// if there is no error...
 								if(!is_bool($lfdc)){
-									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($lfdc_RSLT['name'] .'", "id":"'. stripslashes(htmlspecialchars($lfdc_RSLT['id'])) .'"}');
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($lfdc_RSLT['name'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdc_RSLT['id'])) .'"}');
 									$rewind = 1;				
 									while($row = mysqli_fetch_assoc($lfdc)) {
 										$actualid = stripslashes(htmlspecialchars($row['id']));
