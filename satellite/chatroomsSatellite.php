@@ -108,7 +108,7 @@ class Chatroom implements MessageComponentInterface {
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
 										if($lfdu_RSLT['2fa_admission'] == "1"){
-											$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
+											//$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 											$conn->send("Welcome to the Chatrooms Experience!");
 											// allow the user to join
 											foreach($this->clients as $client) {
@@ -129,7 +129,7 @@ class Chatroom implements MessageComponentInterface {
 									}
 									else{
 										$conn->send("Welcome to the Chatrooms Experience!");
-										$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
+										//$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 										// if email is not required, let them in
 										foreach($this->clients as $client) {
 											if($conn!=$client) {
