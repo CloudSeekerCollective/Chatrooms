@@ -237,7 +237,7 @@ class Chatroom implements MessageComponentInterface {
 									echo("[Satellite] 1User is banned! Oh well.\n");
 								}
 								// make sure the user is online
-								if($lfdu_RSLT['is_online'] == "1"){
+								//if($lfdu_RSLT['is_online'] == "1"){
 									// if the server has email verification...
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
@@ -266,9 +266,9 @@ class Chatroom implements MessageComponentInterface {
 										$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='0' WHERE `authentication`='". $utoken ."'");
 									}
 								}
-								else{
+								/*else{
 									echo("[Satellite] 1User already online! Oh well.\n");
-								}
+								}*/
 							}
 							// if the user IS restricted...
 							else{
