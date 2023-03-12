@@ -554,6 +554,7 @@ class Chatroom implements MessageComponentInterface {
 				else{
 					echo("");
 				}*/
+			}
 			break;
 			case "vchannel":
 				//extraStuff/message_intent();
