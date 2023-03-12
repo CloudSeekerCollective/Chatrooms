@@ -529,8 +529,8 @@ class Chatroom implements MessageComponentInterface {
 			$output = '{"messages":';
 			// if authentication is set...
 			if(!empty($dataset['authentication'])){
-				var_dump($this->clients);
-				/*// isolate authentication
+				//var_dump($this->clients);
+				// isolate authentication
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
 	
 				// lfdu = look for da user
@@ -539,21 +539,31 @@ class Chatroom implements MessageComponentInterface {
 				// if the result is NOT a boolean (in other words an error)...
 				if(!is_bool($lfdu)){
 					// if the authentication matches a user...
+					
 					if(mysqli_num_rows($lfdu) != 0){
 						// cache db results
-						$from->send('{"action":"onlineuser","status":"success", "name":"'. stripslashes(htmlspecialchars(json_decode($this->users)['username'])) .'", "id":"'. stripslashes(htmlspecialchars(json_decode($this->users)['id'])) .'"}');
+						$s_auth = substr(stripslashes(htmlspecialchars($this->clients->httpRequest->getUri()->getQuery())), 5);
+						$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
+						$lfdu2_RSLT = mysqli_fetch_assoc($lfdu_2);
+						if(mysqli_num_rows($lfdu2) != 0){
+							$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'"}');
+						}
+						
 						$rewind = 1;				
-						while($row = mysqli_fetch_assoc($lfdc)) {
-							$actualid = stripslashes(htmlspecialchars($row['id']));
-							$name = stripslashes(htmlspecialchars($row['name']));
-							$from->send('{"action":"channel","status":"success", "username":"'. $name .'", "id":"'. $actualid .'"}');
+						while($row = sizeof($this->clients)) {
+							$s_auth = $utoken = substr(stripslashes(htmlspecialchars($row->httpRequest->getUri()->getQuery())), 5);
+							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
+							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu_2);
+							if(mysqli_num_rows($lfdu2) != 0){
+								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'"}');
+							}
 							$rewind++;
 			  			}						
 					}
 				}
 				else{
 					echo("");
-				}*/
+				}
 			}
 			break;
 			case "vchannel":
