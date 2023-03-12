@@ -529,7 +529,7 @@ class Chatroom implements MessageComponentInterface {
 			$output = '{"messages":';
 			// if authentication is set...
 			if(!empty($dataset['authentication'])){
-				var_dump($this->users);
+				var_dump($this->clients);
 				/*// isolate authentication
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
 	
