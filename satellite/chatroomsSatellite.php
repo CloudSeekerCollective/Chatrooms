@@ -257,7 +257,7 @@ class Chatroom implements MessageComponentInterface {
 										}
 									}
 									else{
-										$this->users->detach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
+										
 										foreach($this->clients as $client) {
 											if($conn!=$client) {
 												$client->send('{"action":"leave","status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "channel":"'. $serverconfig['system_channel'] .'", "uid":"'. stripslashes(htmlspecialchars($lfdu_RSLT['id'])) .'", "msg":"has left the Chat :(","time":"'. time() .'", "attachment1":""}');
