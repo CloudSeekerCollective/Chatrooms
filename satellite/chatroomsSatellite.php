@@ -16,7 +16,7 @@ require_once '../bin/vendor/autoload.php';
 
 class Chatroom implements MessageComponentInterface {
 	protected $clients;
-	// protected $users;
+	protected $users;
 
 	public function __construct() {
 		$GLOBALS['redeclaration'] = false;
@@ -108,6 +108,7 @@ class Chatroom implements MessageComponentInterface {
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
 										if($lfdu_RSLT['2fa_admission'] == "1"){
+											$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 											$conn->send("Welcome to the Chatrooms Experience!");
 											// allow the user to join
 											foreach($this->clients as $client) {
@@ -128,6 +129,7 @@ class Chatroom implements MessageComponentInterface {
 									}
 									else{
 										$conn->send("Welcome to the Chatrooms Experience!");
+										$this->users->attach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 										// if email is not required, let them in
 										foreach($this->clients as $client) {
 											if($conn!=$client) {
@@ -240,6 +242,7 @@ class Chatroom implements MessageComponentInterface {
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
 										if($lfdu_RSLT['2fa_admission'] == "1"){
+											$this->users->detach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 											// announce departure
 											foreach($this->clients as $client) {
 												if($conn!=$client) {
@@ -254,6 +257,7 @@ class Chatroom implements MessageComponentInterface {
 										}
 									}
 									else{
+										$this->users->detach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 										foreach($this->clients as $client) {
 											if($conn!=$client) {
 												$client->send('{"action":"leave","status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "channel":"'. $serverconfig['system_channel'] .'", "uid":"'. stripslashes(htmlspecialchars($lfdu_RSLT['id'])) .'", "msg":"has left the Chat :(","time":"'. time() .'", "attachment1":""}');
@@ -517,6 +521,39 @@ class Chatroom implements MessageComponentInterface {
 					}	
 				}
 		
+			break;
+			case "onlineusers":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				var_dump($this->users);
+				/*// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+					if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$from->send('{"action":"onlineuser","status":"success", "name":"'. stripslashes(htmlspecialchars(json_decode($this->users)['username'])) .'", "id":"'. stripslashes(htmlspecialchars(json_decode($this->users)['id'])) .'"}');
+						$rewind = 1;				
+						while($row = mysqli_fetch_assoc($lfdc)) {
+							$actualid = stripslashes(htmlspecialchars($row['id']));
+							$name = stripslashes(htmlspecialchars($row['name']));
+							$from->send('{"action":"channel","status":"success", "username":"'. $name .'", "id":"'. $actualid .'"}');
+							$rewind++;
+			  			}						
+					}
+				}
+				else{
+					echo("");
+				}*/
 			break;
 			case "vchannel":
 				//extraStuff/message_intent();
