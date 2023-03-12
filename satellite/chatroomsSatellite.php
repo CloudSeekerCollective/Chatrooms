@@ -265,7 +265,6 @@ class Chatroom implements MessageComponentInterface {
 										}
 										$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='0' WHERE `authentication`='". $utoken ."'");
 									}
-								}
 								/*else{
 									echo("[Satellite] 1User already online! Oh well.\n");
 								}*/
