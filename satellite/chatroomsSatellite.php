@@ -541,24 +541,15 @@ class Chatroom implements MessageComponentInterface {
 					// if the authentication matches a user...
 					
 					if(mysqli_num_rows($lfdu) != 0){
-						// cache db results
-						$s_auth = substr(stripslashes(htmlspecialchars($this->clients->httpRequest->getUri()->getQuery())), 5);
-						$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
-						$lfdu2_RSLT = mysqli_fetch_assoc($lfdu_2);
-						if(mysqli_num_rows($lfdu2) != 0){
-							$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'"}');
-						}
-						
-						$rewind = 1;				
-						while($row = sizeof($this->clients)) {
-							$s_auth = $utoken = substr(stripslashes(htmlspecialchars($row->httpRequest->getUri()->getQuery())), 5);
+						foreach($this->clients as $client) {
+							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
-							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu_2);
+							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
 							if(mysqli_num_rows($lfdu2) != 0){
 								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'"}');
 							}
 							$rewind++;
-			  			}						
+			  			}					
 					}
 				}
 				else{
