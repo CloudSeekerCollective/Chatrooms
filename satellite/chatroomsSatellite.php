@@ -242,7 +242,7 @@ class Chatroom implements MessageComponentInterface {
 									if($serverconfig['require_email'] == true){
 										// ...check if the user has verified email
 										if($lfdu_RSLT['2fa_admission'] == "1"){
-											$this->users->detach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
+											//$this->users->detach("{'username':'". $lfdu_RSLT['username'] ."', 'id':'". $lfdu_RSLT['id'] ."', 'token':'". $utoken ."'}");
 											// announce departure
 											foreach($this->clients as $client) {
 												if($conn!=$client) {
