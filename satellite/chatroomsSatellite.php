@@ -586,8 +586,8 @@ class Chatroom implements MessageComponentInterface {
 							if(mysqli_num_rows($lfdu2) != 0){
 								if($lfdu2_RSLT['id'] == $user)
 								{
-									$from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
-									$client->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$from->send('{"action":"whisper","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$client->send('{"action":"whisper","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
 								}
 							}
 							$rewind++;
