@@ -571,6 +571,7 @@ class Chatroom implements MessageComponentInterface {
 	
 				// lfdu = look for da user
 				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
 				
 				// if the result is NOT a boolean (in other words an error)...
 				if(!is_bool($lfdu)){
@@ -586,8 +587,8 @@ class Chatroom implements MessageComponentInterface {
 							if(mysqli_num_rows($lfdu2) != 0){
 								if($lfdu2_RSLT['id'] == $user)
 								{
-									$from->send('{"action":"whisper","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
-									$client->send('{"action":"whisper","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
 								}
 							}
 							$rewind++;
