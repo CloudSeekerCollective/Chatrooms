@@ -556,6 +556,49 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
+			case "whisper":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication']) and !empty($dataset['message']) and !empty($dataset['recipient'])){
+				//var_dump($this->clients);
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));
+				$user = stripslashes(htmlspecialchars($dataset['recipient']));
+				$msg = stripslashes(htmlspecialchars($dataset['message']));
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+					
+					if(mysqli_num_rows($lfdu) != 0){
+						foreach($this->clients as $client) {
+							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
+							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
+							$uid = stripslashes(htmlspecialchars($lfdu2_RSLT['id']);
+							$usrnm = stripslashes(htmlspecialchars($lfdu2_RSLT['username']);
+							if(mysqli_num_rows($lfdu2) != 0){
+								if($lfdu2_RSLT['id'] == $user)
+								{
+									$from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$client->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+								}
+							}
+							$rewind++;
+			  			}					
+					}
+				}
+				else{
+					echo("");
+				}
+			}
+			break;
 			case "vchannel":
 				//extraStuff/message_intent();
 				// if theres a message and/or an attachment...
