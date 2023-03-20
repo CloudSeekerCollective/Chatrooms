@@ -581,8 +581,8 @@ class Chatroom implements MessageComponentInterface {
 							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
 							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
-							$uid = stripslashes(htmlspecialchars($lfdu2_RSLT['id']);
-							$usrnm = stripslashes(htmlspecialchars($lfdu2_RSLT['username']);
+							$uid = stripslashes(htmlspecialchars($lfdu2_RSLT['id']));
+							$usrnm = stripslashes(htmlspecialchars($lfdu2_RSLT['username']));
 							if(mysqli_num_rows($lfdu2) != 0){
 								if($lfdu2_RSLT['id'] == $user)
 								{
