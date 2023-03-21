@@ -64,7 +64,7 @@ class Chatroom implements MessageComponentInterface {
 		// if the user did, then do all of this
 		else{
 			// if the client is just checking if the server is available...
-			if($conn->httpRequest->getUri()->getQuery() == "ping"){
+			if(substr(stripslashes(htmlspecialchars($conn->httpRequest->getUri()->getQuery())), 5); == "=ping"){
 				$conn->send("[ChatroomsPing] Hello!");
 				$this->clients->detach($conn);
 				$conn->close();
