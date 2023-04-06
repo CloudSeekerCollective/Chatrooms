@@ -521,6 +521,90 @@ class Chatroom implements MessageComponentInterface {
 				}
 		
 			break;
+			case "older_messages":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication']) and !empty($dataset['channel']) and $serverconfig['save_messages'] == true){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdc = mysqli_query($ctds, "SELECT * FROM `messages` WHERE `channel`='". $dataset['channel'] ."' ORDER BY `messages`.`date` DESC LIMIT 256");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
+						$emkeyscount = 0;
+						$mid = mt_rand(10000001, 99999999);
+							// COMING SOON, will be correctly implemented in a future release
+							$greenlight = true;
+							if($greenlight == true){
+								// if the result is successful...
+								if($lfdu_RSLT['status'] != "STAGING"){
+									if($serverconfig['save_messages'] == true){
+										// insert into 'messages' table
+										echo("[Satellite] ???\n");
+									}
+								}
+					
+								// if there is no error...
+								if(!is_bool($lfdc)){
+									$first_authoruname = "";
+									$lfdc_2 = mysqli_query($ctds, "SELECT `username` FROM `accounts` WHERE `id`='". $lfdc_RSLT['author'] ."'");
+									$lfdc_2_RSLT = mysqli_fetch_assoc($lfdc_2);
+									if(mysqli_num_rows($lfdc_2) == 1){
+										$first_authoruname = $lfdc_2_RSLT['username'];
+									}
+									// otherwise just use "Unknown User" xd
+									else{
+										$first_authoruname = "Unknown User";
+									}
+									
+									$from->send('{"action":"message","status":"success", "user":"'. $first_authoruname .'", "channel":"'. $lfdc_RSLT['channel'] .'", "uid":"'. $lfdc_RSLT['author'] .'", "msg":"' .  $lfdc_RSLT['content'] . '","time":"'. $lfdc_RSLT['date'] .'","msgid":"'. $lfdc_RSLT['number'] .'","attachment1":"'. $lfdc_RSLT['attachment1'] .'"}');
+									$rewind = 1;				
+									while($row = mysqli_fetch_assoc($lfdc)) {
+										$author = stripslashes(htmlspecialchars($row['author']));
+										$channl = stripslashes(htmlspecialchars($row['channel']));
+										$contnt = stripslashes(htmlspecialchars($row['content']));
+										$datumo = stripslashes(htmlspecialchars($row['date']));
+										$attach1 = stripslashes(htmlspecialchars($row['attachment1']));
+										$actualid = stripslashes(htmlspecialchars($row['number']));
+										// look for a username...
+										$lfdu_2 = mysqli_query($ctds, "SELECT `username` FROM `accounts` WHERE `id`='". $author ."'");
+										$lfdu_2_RSLT = mysqli_fetch_assoc($lfdu_2);
+										// if the account exists, use the username
+										if(mysqli_num_rows($lfdu_2) == 1){
+											$authoruname = $lfdu_2_RSLT['username'];
+										}
+										// otherwise just use "Unknown User" xd
+										else{
+											$authoruname = "Unknown User";
+										}
+										$from->send('{"action":"message","status":"success", "user":"'. $authoruname .'", "channel":"'. $channl .'", "uid":"'. $author .'", "msg":"' .  $contnt . '","time":"'. $datumo .'","msgid":"'. $actualid .'","attachment1":"'. $attach1 .'"}');
+										$rewind++;
+			  						}						
+								}
+								/*foreach($lfdc_RSLT as $channel) {
+									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
+								}*/
+							}
+							else{
+								echo("");
+							}
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+		
+			break;
 			case "user":
 				if(!empty($dataset['authentication']) and !empty($dataset['id'])){
 		// isolate authentication
