@@ -535,9 +535,9 @@ class Chatroom implements MessageComponentInterface {
 				$lfdc = mysqli_query($ctds, "SELECT * FROM `messages` WHERE `channel`='". $dataset['channel'] ."' ORDER BY `messages`.`date` DESC LIMIT 256");
 				
 				// if the result is NOT a boolean (in other words an error)...
-				if(!is_bool($lfdu)){
+				if(!is_bool($lfdc)){
 					// if the authentication matches a user...
-						if(mysqli_num_rows($lfdu) != 0){
+					if(mysqli_num_rows($lfdc) != 0){
 						// cache db results
 						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
 						$emkeyscount = 0;
@@ -545,14 +545,6 @@ class Chatroom implements MessageComponentInterface {
 							// COMING SOON, will be correctly implemented in a future release
 							$greenlight = true;
 							if($greenlight == true){
-								// if the result is successful...
-								if($lfdu_RSLT['status'] != "STAGING"){
-									if($serverconfig['save_messages'] == true){
-										// insert into 'messages' table
-										echo("[Satellite] ???\n");
-									}
-								}
-					
 								// if there is no error...
 								if(!is_bool($lfdc)){
 									$first_authoruname = "";
