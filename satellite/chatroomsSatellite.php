@@ -557,8 +557,8 @@ class Chatroom implements MessageComponentInterface {
 									else{
 										$first_authoruname = "Unknown User";
 									}
-									
-									$from->send('{"action":"message","status":"success", "user":"'. $first_authoruname .'", "channel":"'. $lfdc_RSLT['channel'] .'", "uid":"'. $lfdc_RSLT['author'] .'", "msg":"' .  $lfdc_RSLT['content'] . '","time":"'. $lfdc_RSLT['date'] .'","msgid":"'. $lfdc_RSLT['number'] .'","attachment1":"'. $lfdc_RSLT['attachment1'] .'"}');
+									$returnjson = array(array("id" => $lfdc_RSLT['number'], "author" => $lfdc_RSLT['author'], "channel" => $lfdc_RSLT['channel'], "content" => stripslashes(htmlspecialchars($lfdc_RSLT['content'])), "date" => $lfdc_RSLT['date'], "username" => $first_authoruname, "attachment1" => $lfdc_RSLT['attachment1']));
+									//$from->send('{"action":"message","status":"success", "user":"'. $first_authoruname .'", "channel":"'. $lfdc_RSLT['channel'] .'", "uid":"'. $lfdc_RSLT['author'] .'", "msg":"' .  $lfdc_RSLT['content'] . '","time":"'. $lfdc_RSLT['date'] .'","msgid":"'. $lfdc_RSLT['number'] .'","attachment1":"'. $lfdc_RSLT['attachment1'] .'"}');
 									$rewind = 1;				
 									while($row = mysqli_fetch_assoc($lfdc)) {
 										$author = stripslashes(htmlspecialchars($row['author']));
@@ -578,9 +578,20 @@ class Chatroom implements MessageComponentInterface {
 										else{
 											$authoruname = "Unknown User";
 										}
-										$from->send('{"action":"message","status":"success", "user":"'. $authoruname .'", "channel":"'. $channl .'", "uid":"'. $author .'", "msg":"' .  $contnt . '","time":"'. $datumo .'","msgid":"'. $actualid .'","attachment1":"'. $attach1 .'"}');
+										
+										$returnjson[$rewind] = array(
+											"id" => $actualid, 
+											"author" => $author, 
+											"channel" => $channl, 
+											"content" => $contnt, 
+											"date" => $datumo, 
+											"username" => $authoruname, 
+											"attachment1" => $attach1
+									       );
 										$rewind++;
-			  						}						
+										//$from->send('{"action":"message","status":"success", "user":"'. $authoruname .'", "channel":"'. $channl .'", "uid":"'. $author .'", "msg":"' .  $contnt . '","time":"'. $datumo .'","msgid":"'. $actualid .'","attachment1":"'. $attach1 .'"}');
+									}
+									$from->send('{"action":"older_messages","status":"success", "messages":'. json_encode($returnjson) .'}');
 								}
 								/*foreach($lfdc_RSLT as $channel) {
 									$from->send('{"action":"channel","status":"success", "name":"'. stripslashes(htmlspecialchars($channel['name'])) .'", "id":"'. stripslashes(htmlspecialchars($channel['id'])) .'"}');
