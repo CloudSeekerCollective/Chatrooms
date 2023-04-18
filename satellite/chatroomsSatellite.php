@@ -616,22 +616,23 @@ class Chatroom implements MessageComponentInterface {
 			// if authentication is set...
 			if(!empty($dataset['authentication'])){
 				// isolate authentication
-				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));
+				//var_dump($serverconfig);
 				try{
 					$from->send('{"action":"properties", 
 						"xstatus":"success", 
-						"server_name":"'. $server_config['server_name'] .'", 
-						"welcome_message":"'. $server_config['welcome_message'] .'", 
-						"save_messages":"'. $server_config['save_messages'] .'", 
-						"system_channel":"'. $server_config['system_channel'] .'", 
-						"load_all_history_if_any":"'. $server_config['load_all_history_if_any'] .'", 
-						"content_id":"'. $server_config['content_id'] .'",
-						"require_email":"'. $server_config['require_email'] .'",
-						"allow_registrations":"'. $server_config['allow_registrations'] .'",
-						"filesize_limit":"'. $server_config['filesize_limit'] .'",
-						"chatrooms_distro":"'. $server_config['chatrooms_distro'] .'",
+						"server_name":"'. $serverconfig['server_name'] .'", 
+						"welcome_message":"'. $serverconfig['welcome_message'] .'", 
+						"save_messages":"'. $serverconfig['save_messages'] .'", 
+						"system_channel":"'. $serverconfig['system_channel'] .'", 
+						"load_all_history_if_any":"'. $serverconfig['load_all_history_if_any'] .'", 
+						"content_id":"'. $serverconfig['content_id'] .'",
+						"require_email":"'. $serverconfig['require_email'] .'",
+						"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
+						"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
+						"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
 						"satellite_version":"0.7.22",
-						"emotes":'. json_encode($server_config['emotes']) .'}');
+						"emotes":'. json_encode($serverconfig['emotes']) .'}');
 				}
 				catch(Exception $e){
 					echo("ERROR! Your chatroom is not set up properly! Make sure you have updated your server properties to match newest version's requirements.\n
