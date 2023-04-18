@@ -608,6 +608,39 @@ class Chatroom implements MessageComponentInterface {
 				}
 		
 			break;
+			case "properties":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+				try{
+					$from->send('{"action":"properties", 
+						"xstatus":"success", 
+						"server_name":"'. $server_config['server_name'] .'", 
+						"welcome_message":"'. $server_config['welcome_message'] .'", 
+						"save_messages":"'. $server_config['save_messages'] .'", 
+						"system_channel":"'. $server_config['system_channel'] .'", 
+						"load_all_history_if_any":"'. $server_config['load_all_history_if_any'] .'", 
+						"content_id":"'. $server_config['content_id'] .'",
+						"require_email":"'. $server_config['require_email'] .'",
+						"allow_registrations":"'. $server_config['allow_registrations'] .'",
+						"filesize_limit":"'. $server_config['filesize_limit'] .'",
+						"chatrooms_distro":"'. $server_config['chatrooms_distro'] .'",
+						"satellite_version":"0.7.22",
+						"emotes":'. json_encode($server_config['emotes']) .'}');
+				}
+				catch(Exception $e){
+					echo("ERROR! Your chatroom is not set up properly! Make sure you have updated your server properties to match newest version's requirements.\n
+					Here's what went wrong:\n". var_dump($e));
+					exit;
+				}
+			}
+		
+			break;
 			case "user":
 				if(!empty($dataset['authentication']) and !empty($dataset['id'])){
 		// isolate authentication
