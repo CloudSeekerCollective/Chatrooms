@@ -1022,7 +1022,7 @@ class Chatroom implements MessageComponentInterface {
 			}
 			break;
 			case "delete": 
-			if(!empty($dataset['message']) and !empty($dataset['msgid'])){
+			if(!empty($dataset['msgid'])){
 			// isolate information
 			$chnl = stripslashes(htmlspecialchars($dataset['msgid']));
 			//$attach1 = stripslashes($dataset['attachment1']);
