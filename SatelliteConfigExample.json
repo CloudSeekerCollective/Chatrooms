@@ -1,0 +1,20 @@
+{
+  // TODO: rename this file to SatelliteConfig.json and place it in the same folder as the satellites
+  
+  // satellite and voice satellite ports, defaults are 7778 and 7788 respectively, change them if you absolutely have to
+	"port": "7778",
+	"vport": "7788",
+  // mysql credentials
+	"mysql_username": "USERNAME",
+	"mysql_password": "PASSWORD",
+  // path for server properties
+	"etc_configs_path": "/???/serverproperties.json",
+  // certificate paths
+	"cert_path": "/???/fullchain.pem",
+	"pkey_path": "/???/privkey.pem",
+  // should the satellite be secure? 
+  // (!! WARNING: only disable this when testing on localhost, otherwise keep this ON AT ALL TIMES !!)
+  "force_secure": true,
+  // debug mode will be used in future versions of the satellite
+	"debug_mode": false
+}
