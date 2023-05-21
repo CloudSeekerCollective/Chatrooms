@@ -805,7 +805,7 @@ class Chatroom implements MessageComponentInterface {
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));
 				$user = stripslashes(htmlspecialchars($dataset['recipient']));
 				$msg = stripslashes(htmlspecialchars($dataset['message']));
-				$attachment = stripslashes(htmlspecialchars(
+				$attachment = stripslashes(htmlspecialchars($dataset['attachment']));
 	
 				// lfdu = look for da user
 				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
