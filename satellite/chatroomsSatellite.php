@@ -805,6 +805,11 @@ class Chatroom implements MessageComponentInterface {
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));
 				$user = stripslashes(htmlspecialchars($dataset['recipient']));
 				$msg = stripslashes(htmlspecialchars($dataset['message']));
+				if(!empty($dataset['attachment'])){
+					$attachment = stripslashes(htmlspecialchars($dataset['attachment']));
+				}else{
+					$attachment = "";
+				}
 	
 				// lfdu = look for da user
 				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
@@ -824,8 +829,8 @@ class Chatroom implements MessageComponentInterface {
 							if(mysqli_num_rows($lfdu2) != 0){
 								if($lfdu2_RSLT['id'] == $user)
 								{
-									$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
-									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '"}');
+									$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
+									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
 								}
 							}
 							$rewind++;
