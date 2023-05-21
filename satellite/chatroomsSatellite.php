@@ -799,17 +799,13 @@ class Chatroom implements MessageComponentInterface {
 			// goofy system, will rework later on
 			$output = '{"messages":';
 			// if authentication is set...
-			if(!empty($dataset['authentication']) and !empty($dataset['message']) and !empty($dataset['recipient'])){
+			if(!empty($dataset['authentication']) and !empty($dataset['recipient']) and !empty($dataset['attachment'])){
 				//var_dump($this->clients);
 				// isolate authentication
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));
 				$user = stripslashes(htmlspecialchars($dataset['recipient']));
 				$msg = stripslashes(htmlspecialchars($dataset['message']));
-				if(!empty($dataset['attachment'])){
-					$attachment = stripslashes(htmlspecialchars($dataset['attachment']));
-				}else{
-					$attachment = "";
-				}
+				$attachment = stripslashes(htmlspecialchars(
 	
 				// lfdu = look for da user
 				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
@@ -827,7 +823,7 @@ class Chatroom implements MessageComponentInterface {
 							$uid = stripslashes(htmlspecialchars($lfdu2_RSLT['id']));
 							$usrnm = stripslashes(htmlspecialchars($lfdu2_RSLT['username']));
 							if(mysqli_num_rows($lfdu2) != 0){
-								if($lfdu2_RSLT['id'] == $user)
+								if($lfdu2_RSLT['id'] == $user and empty($dataset['message']) and !empty($dataset['attachment']))
 								{
 									$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
 									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
