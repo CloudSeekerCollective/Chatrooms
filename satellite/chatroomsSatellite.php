@@ -823,10 +823,12 @@ class Chatroom implements MessageComponentInterface {
 							$uid = stripslashes(htmlspecialchars($lfdu2_RSLT['id']));
 							$usrnm = stripslashes(htmlspecialchars($lfdu2_RSLT['username']));
 							if(mysqli_num_rows($lfdu2) != 0){
-								if($lfdu2_RSLT['id'] == $user and empty($dataset['message']) and !empty($dataset['attachment']))
+								if($lfdu2_RSLT['id'] == $user)
 								{
-									$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
-									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
+									if($dataset['message'] == "" or empty($dataset['message'])){
+										$from->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
+										$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
+									}
 								}
 							}
 							$rewind++;
