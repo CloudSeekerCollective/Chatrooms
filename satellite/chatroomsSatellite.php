@@ -682,7 +682,7 @@ class Chatroom implements MessageComponentInterface {
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
-								$cdate = stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", $lfdu_RSLT['creationdate'])));
+								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
@@ -740,7 +740,7 @@ class Chatroom implements MessageComponentInterface {
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
-								$cdate = stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", $lfdu_RSLT['creationdate'])));
+								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"account", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
