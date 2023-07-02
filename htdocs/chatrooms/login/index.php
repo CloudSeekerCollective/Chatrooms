@@ -112,7 +112,7 @@
   		}
 		if($stop == false and $password == $passwordconfirm){
 			$token = md5($username . $password . time());
-			$insert_user = mysqli_query($ctds, "INSERT INTO `accounts`(`username`, `password`, `email`, `id`, `picture`, `creationdate`, `status`, `authentication`, `badges`, `latest2fa`) VALUES ('". $username ."','". password_hash($password, PASSWORD_DEFAULT) ."','','". mysqli_num_rows($lfdu) + 1 ."','','". time() ."','ok','". $token ."','[]','000000')");
+			$insert_user = mysqli_query($ctds, "INSERT INTO `accounts`(`username`, `password`, `email`, `id`, `picture`, `creationdate`, `status`, `authentication`, `badges`, `latest2fa`,`mod_note`) VALUES ('". $username ."','". password_hash($password, PASSWORD_DEFAULT) ."','','". mysqli_num_rows($lfdu) + 1 ."','','". time() ."','ok','". $token ."','[]','000000','')");
 			setcookie("authentication", $token, time() + 2000000000, "/");
 			if($serverconfig['require_email'] == true){
 				header("Location: ./2fa/step1/");
