@@ -705,7 +705,7 @@ class Chatroom implements MessageComponentInterface {
 		}
 	}
 			break;
-			case "user->by_screen_name":
+			case "user:by_screen_name":
 				if(!empty($dataset['authentication']) and !empty($dataset['username'])){
 		// isolate authentication
 		$auth = stripslashes(htmlspecialchars($dataset['authentication']));
