@@ -731,7 +731,7 @@ class Chatroom implements MessageComponentInterface {
 						$uid = stripslashes(htmlspecialchars($dataset['username']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate` FROM `accounts` WHERE `id`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate` FROM `accounts` WHERE `username`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
