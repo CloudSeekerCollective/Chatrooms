@@ -1140,14 +1140,17 @@ class Chatroom implements MessageComponentInterface {
 						$lfdutb = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `roles` FROM `accounts` WHERE `username`='". $user ."'");
 						$lfdutb_RSLT = mysqli_fetch_assoc($lfdutb);
 						if(!empty($userroles)){
-							for($i = 0; $i >= $userroles; $i++){
+							if($userroles[0]){
+								$greenlight = true;
+							}
+							/*for($i = 0; $i >= $userroles; $i++){
 								if($userroles[$i] == 'admin'){
-									$greenlight = true;
+									
 								}
 								else{
 									$greenlight = false;
 								}
-							}
+							}*/
 						}
 
 							if($greenlight == true){
