@@ -1142,6 +1142,7 @@ class Chatroom implements MessageComponentInterface {
 						if(!empty($userroles)){
 							if($userroles[0]){
 								$greenlight = true;
+								$query = "UPDATE `accounts` SET `status`='BANNED' WHERE `username`='". $user ."'";
 							
 							/*for($i = 0; $i >= $userroles; $i++){
 								if($userroles[$i] == 'admin'){
@@ -1154,7 +1155,6 @@ class Chatroom implements MessageComponentInterface {
 
 							if($greenlight == true){
 								// if the result is successful...
-								$query = "UPDATE `accounts` SET `status`='BANNED' WHERE `username`='". $user ."'";
 								$from->send('{"action":"administrative:ban_alert", "status":"success", "user":"'. $user .'", "uid":"'. stripslashes(htmlspecialchars($lfdutb_RSLT['id'])) .'", "legacy_msg":"' .  $usrnm . ' has been BANNED!"}');
 								foreach($this->clients as $client) {
 									if($from!=$client) {
