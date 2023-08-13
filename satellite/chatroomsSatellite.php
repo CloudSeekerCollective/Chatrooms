@@ -751,7 +751,12 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
-								$userroles = $lfdu_RSLT['roles'];
+								if(empty($lfdu_RSLT['roles'])){
+									$userroles = "[]";
+								}
+								else{
+									$userroles = json_decode($lfdu_RSLT['roles']);
+								}
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'","roles":'. $userroles .'}');
@@ -810,7 +815,12 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
-								$userroles = $lfdu_RSLT['roles'];
+								if(empty($lfdu_RSLT['roles'])){
+									$userroles = "[]";
+								}
+								else{
+									$userroles = json_decode($lfdu_RSLT['roles']);
+								}
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"account", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'","roles":'. $userroles .'}');
