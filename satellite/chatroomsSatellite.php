@@ -1165,8 +1165,8 @@ class Chatroom implements MessageComponentInterface {
 										$greenlight = true;
 										if($user == $selected_username){
 											$client->send('{"status":"fail", "error":"or_you_will_get_clapped"}');
-											$this->clients->detach($conn);
-											$conn->close();
+											$client->detach($conn);
+											$client->close();
 											echo("[Satellite] User account ". stripslashes(htmlspecialchars($user)) ." successfully BANNED!\n");
 										}
 										else{
