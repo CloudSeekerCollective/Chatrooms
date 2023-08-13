@@ -1142,7 +1142,7 @@ class Chatroom implements MessageComponentInterface {
 						if(!empty($userroles)){
 							if($userroles[0]){
 								$greenlight = true;
-							}
+							
 							/*for($i = 0; $i >= $userroles; $i++){
 								if($userroles[$i] == 'admin'){
 									
@@ -1151,7 +1151,6 @@ class Chatroom implements MessageComponentInterface {
 									$greenlight = false;
 								}
 							}*/
-						}
 
 							if($greenlight == true){
 								// if the result is successful...
@@ -1179,7 +1178,7 @@ class Chatroom implements MessageComponentInterface {
 							}
 							else{
 								echo("");
-							}
+							}}}
 						}
 					}
 					else{
