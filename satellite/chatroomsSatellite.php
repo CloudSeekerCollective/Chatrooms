@@ -1088,7 +1088,7 @@ class Chatroom implements MessageComponentInterface {
 			}
 			break;
 			case "administrative:ban_by_screen_name": 
-			if(!empty($dataset['username']))){
+			if(!empty($dataset['username'])){
 			// isolate information
 			$user = stripslashes(htmlspecialchars($dataset['username']));
 			//$attach1 = stripslashes($dataset['attachment1']);
