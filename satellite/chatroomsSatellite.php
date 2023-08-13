@@ -1148,9 +1148,6 @@ class Chatroom implements MessageComponentInterface {
 								}
 							}
 						}
-						else{
-							$greenlight = true;
-						}
 
 							if($greenlight == true){
 								// if the result is successful...
@@ -1165,7 +1162,7 @@ class Chatroom implements MessageComponentInterface {
 										$greenlight = true;
 										if($user == $selected_username){
 											$client->send('{"status":"fail", "error":"or_you_will_get_clapped"}');
-											$client->detach($conn);
+											$this->clients->detach($client);
 											$client->close();
 											echo("[Satellite] User account ". stripslashes(htmlspecialchars($user)) ." successfully BANNED!\n");
 										}
