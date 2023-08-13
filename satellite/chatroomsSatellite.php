@@ -1123,7 +1123,12 @@ class Chatroom implements MessageComponentInterface {
 						if(mysqli_num_rows($lfdu) != 0){
 						// cache db results
 						$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
-						$userroles = json_decode($lfdu_RSLT['roles']);
+						if(empty($lfdu_RSLT['roles'])){
+							$userroles = "[]";
+						}
+						else{
+							$userroles = json_decode($lfdu_RSLT['roles']);
+						}
 						$greenlight = false;
 						// isolate username, user ID
 						$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
@@ -1159,7 +1164,7 @@ class Chatroom implements MessageComponentInterface {
 										$selected_username = stripslashes(htmlspecialchars($lfduS_RSLT['username']));
 										$greenlight = true;
 										if($user == $selected_username){
-											$conn->send('{"status":"fail", "error":"or_you_will_get_clapped"}');
+											$client->send('{"status":"fail", "error":"or_you_will_get_clapped"}');
 											$this->clients->detach($conn);
 											$conn->close();
 											echo("[Satellite] User account ". stripslashes(htmlspecialchars($user)) ." successfully BANNED!\n");
