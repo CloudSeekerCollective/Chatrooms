@@ -1128,7 +1128,7 @@ class Chatroom implements MessageComponentInterface {
 						}
 						else{
 							$userroles = json_decode($lfdu_RSLT['roles']);
-							echo(vardump($userroles));
+							echo(var_dump($userroles));
 						}
 						$greenlight = false;
 						// isolate username, user ID
