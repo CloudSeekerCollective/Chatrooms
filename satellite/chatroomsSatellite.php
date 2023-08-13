@@ -1131,8 +1131,8 @@ class Chatroom implements MessageComponentInterface {
 						$emkeyscount = 0;
 						$actual_mesg = $mesg;
 
-						$lfdutb = mysqli_query($ctds, "SELECT `username`,`id`,`status` FROM `accounts` WHERE `username`='". $user ."'");
-						$lfdutb_RSLT = mysqli_fetch_assoc($lfdm);
+						$lfdutb = mysqli_query($ctds, "SELECT `username`, `id`, `status`, `roles` FROM `accounts` WHERE `username`='". $user ."'");
+						$lfdutb_RSLT = mysqli_fetch_assoc($lfdutb);
 						if(!empty($userroles)){
 							for($i = 0; $i >= $userroles; $i++){
 								if($userroles[$i] == 'admin'){
@@ -1150,7 +1150,7 @@ class Chatroom implements MessageComponentInterface {
 							if($greenlight == true){
 								// if the result is successful...
 								$query = "UPDATE `accounts` SET `status`='BANNED' WHERE `username`='". $user ."'";
-								$from->send('{"action":"administrative:ban_alert", "status":"success", "user":"'. $usrnm .'", "uid":"'. $id .'", "legacy_msg":"' .  $usrnm . ' has been BANNED!"}');
+								$from->send('{"action":"administrative:ban_alert", "status":"success", "user":"'. $user .'", "uid":"'. stripslashes(htmlspecialchars($lfdutb_RSLT['id'])) .'", "legacy_msg":"' .  $usrnm . ' has been BANNED!"}');
 								foreach($this->clients as $client) {
 									if($from!=$client) {
 										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
