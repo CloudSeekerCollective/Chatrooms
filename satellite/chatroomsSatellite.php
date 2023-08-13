@@ -636,11 +636,11 @@ class Chatroom implements MessageComponentInterface {
 						"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
 						"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
 						"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
-						"satellite_version":"0.7.31",
+						"satellite_version":"0.7.32",
 						"emotes":'. json_encode($serverconfig['emotes']) .'}');
 				}
 				catch(Exception $e){
-					echo("ERROR! Your chatroom is not set up properly! Make sure you have updated your server properties to match newest version's requirements.\n
+					echo("\n** ERROR! Your chatroom is not set up properly! Make sure you have updated your server properties to match newest version's requirements. **\n
 					Here's what went wrong:\n". var_dump($e));
 					exit;
 				}
@@ -746,10 +746,11 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
+								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
-								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
+								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'","roles":'. $userroles .'}');
+								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate, "roles":$userroles/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
 							else{
@@ -804,10 +805,11 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
+								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"account", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
-								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
+								$from->send('{"action":"account", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'","roles":'. $userroles .'}');
+								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate, /*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
 							else{
@@ -1066,6 +1068,86 @@ class Chatroom implements MessageComponentInterface {
 										if($greenlight == true){
 											$client->send('{"action":"edit", "status":"success", "user":"'. $usrnm .'", "msgid":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'", "attachment1":"'. $attach1 .'"}');
 											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully edited!\n");
+										}
+										else{
+											// do nothing. lol
+											echo("");
+										}
+									}
+								}
+							}
+							else{
+								echo("");
+							}
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
+			case "administrative:ban_by_screen_name": 
+			if(!empty($dataset['username']))){
+			// isolate information
+			$user = stripslashes(htmlspecialchars($dataset['username']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+						// cache db results
+						$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
+						$userroles = json_decode($lfdu_RSLT['roles']);
+						$greenlight = false;
+						// isolate username, user ID
+						$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
+						$id = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
+						$emkeyscount = 0;
+						$actual_mesg = $mesg;
+
+						$lfdutb = mysqli_query($ctds, "SELECT `username`,`id`,`status` FROM `accounts` WHERE `username`='". $user ."'");
+						$lfdutb_RSLT = mysqli_fetch_assoc($lfdm);
+						if(!empty($userroles)){
+							for($i = 0; $i >= $userroles; $i++){
+								if($userroles[$i] == 'admin'){
+									$greenlight = true;
+								}
+								else{
+									$greenlight = false;
+								}
+							}
+						}
+						else{
+							$greenlight = true;
+						}
+
+							if($greenlight == true){
+								// if the result is successful...
+								$query = "UPDATE `accounts` SET `status`='BANNED' WHERE `username`='". $user ."'";
+								$from->send('{"action":"administrative:ban_alert", "status":"success", "user":"'. $usrnm .'", "uid":"'. $id .'", "legacy_msg":"' .  $usrnm . ' has been BANNED!"}');
+								foreach($this->clients as $client) {
+									if($from!=$client) {
+										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $utoken ."'");
+										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
+										$selected_username = stripslashes(htmlspecialchars($lfduS_RSLT['username']));
+										$greenlight = true;
+										if($user == $selected_username){
+											$conn->send('{"status":"fail", "error":"or_you_will_get_clapped"}');
+											$this->clients->detach($conn);
+											$conn->close();
+											echo("[Satellite] User account ". stripslashes(htmlspecialchars($user)) ." successfully BANNED!\n");
 										}
 										else{
 											// do nothing. lol
