@@ -448,7 +448,12 @@ class Chatroom implements MessageComponentInterface {
 						$lfdc = mysqli_query($ctds, "SELECT * FROM `channels`");
 						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
 						$channel_allowed = json_decode($lfdc_RSLT['allowed_roles']);
-						$userroles = json_decode($lfdu_RSLT['roles']);
+						if(empty($lfdu_RSLT['roles'])){
+							$userroles = "[]";
+						}
+						else{
+							$userroles = json_decode($lfdu_RSLT['roles']);
+						}
 						$greenlight = false;
 						// isolate username, user ID
 						$nm = stripslashes(htmlspecialchars($lfdc_RSLT['name']));
