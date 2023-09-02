@@ -468,7 +468,6 @@ class VChatroom implements MessageComponentInterface {
 			break;
 		}
 	}
-	}
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		$conn->close();
 		echo("ERROR! ". $e ."\n");
