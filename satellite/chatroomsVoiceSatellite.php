@@ -316,6 +316,8 @@ class VChatroom implements MessageComponentInterface {
 		);
 		// data sent from the client is MOST LIKELY json, so parse it
 		$dataset = json_decode($data, true);
+		switch(stripslashes(htmlspecialchars($dataset['type']))){
+			case "message":
 		// if theres a message and/or an attachment...
 		if(!empty($dataset['message'])){
 			// DEPRECATED: connectionlist will be removed in a future release
@@ -428,6 +430,44 @@ class VChatroom implements MessageComponentInterface {
 			else{
 				echo('1\n');
 			}
+		break;
+			case "onlineusers":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				//var_dump($this->clients);
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+					
+					if(mysqli_num_rows($lfdu) != 0){
+						foreach($this->clients as $client) {
+							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `picture`, `profilestatus`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
+							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
+							if(mysqli_num_rows($lfdu2) != 0){
+								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'","profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
+							}
+							$rewind++;
+			  			}					
+					}
+				}
+				else{
+					echo("");
+				}
+			}
+			break;
+		}
+	}
 	}
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		$conn->close();
