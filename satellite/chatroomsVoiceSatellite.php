@@ -20,9 +20,9 @@ class VChatroom implements MessageComponentInterface {
 
 	public function __construct() {
 		$GLOBALS['redeclaration'] = false;
-		echo("Welcome to the ChatroomsV Experience! (Compiled on 08/02/2023)\n
+		echo("Welcome to the ChatroomsV Experience!\n
       Chatrooms is a free, open source and lightweight chat platform where anyone can host a space for their friends, people and even family to hang out.
-    Copyright (C) 20". date("y") ."  Team CloudSeeker (Popular Toppling Jelly/Teodor Boshkoski and GeofTheCake)\n
+    Copyright (C) 2022-2023 The CloudSeeker Collective (Theodor Boshkoski, GeofTheCake and OreyTV)\n
 
         This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
