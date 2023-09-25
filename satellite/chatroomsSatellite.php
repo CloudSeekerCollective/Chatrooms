@@ -22,7 +22,7 @@ class Chatroom implements MessageComponentInterface {
 		$GLOBALS['redeclaration'] = false;
 		echo("Welcome to the Chatrooms Experience!\n
       Chatrooms is a free, open source and lightweight chat platform where anyone can host a space for their friends, people and even family to hang out.
-    Copyright (C) 2022-2023 The CloudSeeker Collective <https://cloudseeker.xyz>\n
+    Copyright (C) 2022-2023 The CloudSeeker Collective  (Theodor Boshkoski, GeofTheCake and OreyTV) <https://cloudseeker.xyz>\n
 
         This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -43,8 +43,8 @@ class Chatroom implements MessageComponentInterface {
 		$config = json_decode($configpath, true);
 		$ctds = mysqli_connect("localhost", $config['mysql_username'], $config['mysql_password'], "chrms_universe");
 		$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='0' WHERE 1");
-		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE accounts ADD COLUMN IF NOT EXISTS user_public_mood VARCHAR(20)");
-		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE accounts ADD COLUMN IF NOT EXISTS user_public_mood INT");
+		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE `accounts` MODIFY IF EXISTS `user_public_mood` VARCHAR(20)");
+		$check_for_new_cols_2 = mysqli_query($ctds, "ALTER TABLE `accounts` MODIFY IF EXISTS `presence` VARCHAR(10)");
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
