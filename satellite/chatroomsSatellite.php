@@ -680,7 +680,7 @@ class Chatroom implements MessageComponentInterface {
 						$uid = stripslashes(htmlspecialchars($dataset['id']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_mood`, `presence` FROM `accounts` WHERE `id`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_public_mood`, `presence` FROM `accounts` WHERE `id`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
@@ -691,7 +691,7 @@ class Chatroom implements MessageComponentInterface {
 								// isolate all of these variables JUST IN CASE
 								$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
 								$pres = stripslashes(htmlspecialchars($lfdu_RSLT['presence']));
-								$mood = stripslashes(htmlspecialchars($lfdu_RSLT['user_mood']));
+								$mood = stripslashes(htmlspecialchars($lfdu_RSLT['user_public_mood']));
 								$actualuid = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
@@ -1417,7 +1417,7 @@ class Chatroom implements MessageComponentInterface {
 						if(mysqli_num_rows($lfdu) != 0){
 							// if the result is successful...
 							$from->send('{"action":"editprofile", "status":"success"}');
-							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `user_mood`='". $status ."' WHERE `authentication`='". $auth ."'");
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `user_public_mood`='". $status ."' WHERE `authentication`='". $auth ."'");
 						}
 					}
 					else{
