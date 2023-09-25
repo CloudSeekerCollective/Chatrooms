@@ -43,8 +43,8 @@ class Chatroom implements MessageComponentInterface {
 		$config = json_decode($configpath, true);
 		$ctds = mysqli_connect("localhost", $config['mysql_username'], $config['mysql_password'], "chrms_universe");
 		$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='0' WHERE 1");
-		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE `accounts` MODIFY IF EXISTS `user_public_mood` VARCHAR(20)");
-		$check_for_new_cols_2 = mysqli_query($ctds, "ALTER TABLE `accounts` MODIFY IF EXISTS `presence` VARCHAR(10)");
+		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE `accounts` ADD COLUMN IF NOT EXISTS `user_public_mood` VARCHAR(20)");
+		$check_for_new_cols_2 = mysqli_query($ctds, "ALTER TABLE `accounts` ADD COLUMN IF NOT EXISTS `presence` VARCHAR(10)");
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
