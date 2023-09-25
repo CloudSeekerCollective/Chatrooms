@@ -643,7 +643,7 @@ class Chatroom implements MessageComponentInterface {
 						"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
 						"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
 						"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
-						"satellite_version":"0.7.32",
+						"satellite_version":"0.8",
 						"emotes":'. json_encode($serverconfig['emotes']) .'}');
 				}
 				catch(Exception $e){
