@@ -20,9 +20,9 @@ class Chatroom implements MessageComponentInterface {
 
 	public function __construct() {
 		$GLOBALS['redeclaration'] = false;
-		echo("Welcome to the Chatrooms Experience! (Compiled on 08/02/2023)\n
+		echo("Welcome to the Chatrooms Experience!\n
       Chatrooms is a free, open source and lightweight chat platform where anyone can host a space for their friends, people and even family to hang out.
-    Copyright (C) 20". date("y") ."  Team CloudSeeker (Popular Toppling Jelly/Teodor Boshkoski and GeofTheCake)\n
+    Copyright (C) 2022-2023 The CloudSeeker Collective <https://cloudseeker.xyz>\n
 
         This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -38,11 +38,13 @@ class Chatroom implements MessageComponentInterface {
     along with this program.  If not, see <https://www.gnu.org/licenses/>.\n");
 		$this->clients = new \SplObjectStorage;
 		echo("[Satellite] Server started\n");
-		sleep(5);
+		sleep(1);
 		$configpath = file_get_contents("./SatelliteConfig.json");
 		$config = json_decode($configpath, true);
 		$ctds = mysqli_connect("localhost", $config['mysql_username'], $config['mysql_password'], "chrms_universe");
 		$reset_online_users = mysqli_query($ctds, "UPDATE `accounts` SET `is_online`='0' WHERE 1");
+		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE accounts ADD COLUMN IF NOT EXISTS user_public_mood VARCHAR(20)");
+		$check_for_new_cols_1 = mysqli_query($ctds, "ALTER TABLE accounts ADD COLUMN IF NOT EXISTS user_public_mood INT");
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
@@ -678,7 +680,7 @@ class Chatroom implements MessageComponentInterface {
 						$uid = stripslashes(htmlspecialchars($dataset['id']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate` FROM `accounts` WHERE `id`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_mood`, `presence` FROM `accounts` WHERE `id`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
@@ -688,6 +690,8 @@ class Chatroom implements MessageComponentInterface {
 								$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
 								// isolate all of these variables JUST IN CASE
 								$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
+								$pres = stripslashes(htmlspecialchars($lfdu_RSLT['presence']));
+								$mood = stripslashes(htmlspecialchars($lfdu_RSLT['user_mood']));
 								$actualuid = stripslashes(htmlspecialchars($lfdu_RSLT['id']));
 								$stts = stripslashes(htmlspecialchars($lfdu_RSLT['status']));
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
@@ -696,7 +700,7 @@ class Chatroom implements MessageComponentInterface {
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
-								echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
+								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
 							else{
@@ -864,7 +868,6 @@ class Chatroom implements MessageComponentInterface {
 							if(mysqli_num_rows($lfdu2) != 0){
 								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'","profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
 							}
-							$rewind++;
 			  			}					
 					}
 				}
@@ -909,7 +912,6 @@ class Chatroom implements MessageComponentInterface {
 									$client->send('{"action":"whisper", "status":"success", "user":"'. stripslashes(htmlspecialchars($lfdu_RSLT['username'])) .'", "recipient":"'. $usrnm .'", "uid":"'. $uid .'", "msg":"' . $msg . '", "attachment1": "'. $attachment .'"}');
 								}
 							}
-							$rewind++;
 			  			}					
 					}
 				}
@@ -965,8 +967,7 @@ class Chatroom implements MessageComponentInterface {
 								// $from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
 								if($lfdu_RSLT['status'] != "STAGING"){
 									if($serverconfig['save_messages'] == true){
-										// insert into 'messages' table
-										echo("[Satellite] ???\n");
+										// do nothing
 									}
 								}
 					
@@ -1395,6 +1396,89 @@ class Chatroom implements MessageComponentInterface {
 				}
 			}
 			break;
+			case "editprofile:mood": 
+			if(!empty($dataset['mood'])){
+			// isolate information
+			$status = stripslashes(htmlspecialchars($dataset['mood']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+							// if the result is successful...
+							$from->send('{"action":"editprofile", "status":"success"}');
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `user_mood`='". $status ."' WHERE `authentication`='". $auth ."'");
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}
+			break;
+			case "editprofile:presence": 
+			if(!empty($dataset['presence'])){
+			if($dataset['presence'] == "online" or $dataset['presence'] == "idle" or $dataset['presence'] == "dnd" or $dataset['presence'] == "cloaked"){
+			// isolate information
+			$status = stripslashes(htmlspecialchars($dataset['presence']));
+			//$attach1 = stripslashes($dataset['attachment1']);
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+						if(mysqli_num_rows($lfdu) != 0){
+							// if the result is successful...
+							$from->send('{"action":"editprofile", "status":"success"}');
+							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `presence`='". $status ."' WHERE `authentication`='". $auth ."'");
+						}
+					}
+					else{
+						echo('{"status":"authfail"}');
+					}	
+				}
+			}}
+			break;
+			case "editprofile:password": 
+			if(!empty($dataset['authentication']) and !empty($dataset['old_password']) and !empty($dataset['password'])){
+				// isolate them
+				$username = stripslashes(htmlspecialchars($dataset['authentication']));
+				$password = $dataset['old_password'];
+				// time to check
+				$lfdu = mysqli_query($ctds, 'SELECT * FROM `accounts` WHERE `authentication`="'. $username .'"');
+				// cache db results
+				$strings = mysqli_fetch_assoc($lfdu);
+				// ???
+				$attempts = 1;
+				// does the password given by the user match the hash?
+				if(mysqli_num_rows($lfdu) > 0 and password_verify($old_password, $strings['password'])){
+					// yes? good. swap the password with the new one and provide the new token
+					$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `password`='". password_hash($password) ."' WHERE `authentication`='". $auth ."'");
+				}
+				// no? tell them to back off
+				else{
+					$from->send('{"action":"editprofile:password", "status":"fail", "error":"incorrect_credentials"}');
+				}
+			}
+			break;
 			default:
 				// uhm excuse me what the fuck
 				echo("[Satellite] User request could not be determined\n");
@@ -1420,7 +1504,7 @@ $webSock = new React\Socket\Server('0.0.0.0:' . $config['port'], $loop);
 $webSock = new React\Socket\SecureServer($webSock, $loop, [
     'local_cert'        => $config['cert_path'],
     'local_pk'          => $config['pkey_path'],
-    'allow_self_signed' => TRUE,
+    'allow_self_signed' => !$config['force_secure'],
     'verify_peer' => FALSE
 ]);
 
