@@ -699,7 +699,7 @@ class Chatroom implements MessageComponentInterface {
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "creationDate":"'. $cdate .'"}');
+								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'"}');
 								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
