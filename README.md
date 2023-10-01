@@ -4,7 +4,6 @@ Chatrooms is a free, open source and lightweight chat platform where anyone can 
 
 **NOTE: Chatrooms is still in very early development, if you wish to contribute be sure to open a pull request in the community branch!**
 
-Web and desktop client source code coming soon!
 ## How to setup
 **NOTE: You need to follow the [Satellite Setup Guide](https://github.com/PopularTopplingJelly/Chatrooms/blob/main/satellite/how_to_satellite.md) first. Once you do that, you can continue to follow this guide.**
 ### Initial setup
