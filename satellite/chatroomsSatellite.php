@@ -1510,10 +1510,13 @@ class Chatroom implements MessageComponentInterface {
 				$strings = mysqli_fetch_assoc($lfdu);
 				// ???
 				$attempts = 1;
+				// generate new token out of random bs
+				$new_token = md5($username . "." . $password . mt_rand(1, 5000));
 				// does the password given by the user match the hash?
 				if(mysqli_num_rows($lfdu) > 0 and password_verify($old_password, $strings['password'])){
 					// yes? good. swap the password with the new one and provide the new token
-					$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `password`='". password_hash($password) ."' WHERE `authentication`='". $auth ."'");
+					$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `password`='". password_hash($password) ."',`authentication`='". $new_token ."' WHERE `authentication`='". $auth ."'");
+					$from->send('{"action":"editprofile:password", "status":"success", "token":"'. $new_token .'"}');
 				}
 				// no? tell them to back off
 				else{
