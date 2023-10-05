@@ -1515,7 +1515,7 @@ class Chatroom implements MessageComponentInterface {
 				// does the password given by the user match the hash?
 				if(mysqli_num_rows($lfdu) > 0 and password_verify($password, $strings['password'])){
 					// yes? good. swap the password with the new one and provide the new token
-					$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `password`='". password_hash($password) ."',`authentication`='". $new_token ."' WHERE `authentication`='". $auth ."'");
+					$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `password`='". password_hash($password, PASSWORD_DEFAULT) ."',`authentication`='". $new_token ."' WHERE `authentication`='". $auth ."'");
 					$from->send('{"action":"editprofile:password", "status":"success", "token":"'. $new_token .'"}');
 				}
 				// no? tell them to back off
