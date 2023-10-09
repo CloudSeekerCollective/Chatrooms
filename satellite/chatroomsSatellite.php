@@ -699,7 +699,7 @@ class Chatroom implements MessageComponentInterface {
 										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `presence` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
-										if(stripslashes(htmlspecialchars($lfduS_RSLT["authentication"])) == $utoken){
+										if(stripslashes(htmlspecialchars($lfduS_RSLT["id"])) == $uid){
 											$upresence = stripslashes(htmlspecialchars($lfduS_RSLT['presence']));
 											$pres = $upresence;
 										}
@@ -771,7 +771,7 @@ class Chatroom implements MessageComponentInterface {
 										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `presence` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
-										if(stripslashes(htmlspecialchars($lfduS_RSLT["authentication"])) == $utoken){
+										if(stripslashes(htmlspecialchars($lfduS_RSLT["username"])) == $uid){
 											$upresence = stripslashes(htmlspecialchars($lfduS_RSLT['presence']));
 											$pres = $upresence;
 										}
