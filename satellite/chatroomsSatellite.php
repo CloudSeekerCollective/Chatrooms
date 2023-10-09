@@ -765,13 +765,15 @@ class Chatroom implements MessageComponentInterface {
 								// check if the user is ACTUALLY online in the first place
 								$pres = "cloaked";
 								foreach($this->clients as $client) {
-									if($from==$client) {
+									//if($from==$client) {
 										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `presence` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
-										$upresence = stripslashes(htmlspecialchars($lfduS_RSLT['presence']));
-										$pres = $upresence;
-									}
+										if(stripslashes(htmlspecialchars($lfduS_RSLT["authentication"])) == $utoken){
+											$upresence = stripslashes(htmlspecialchars($lfduS_RSLT['presence']));
+											$pres = $upresence;
+										}
+									//}
 								}
 								// cache db result
 								$lfdu_RSLT = mysqli_fetch_assoc($lfdu);
