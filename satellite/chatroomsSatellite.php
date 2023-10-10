@@ -908,8 +908,8 @@ class Chatroom implements MessageComponentInterface {
 							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `picture`, `profilestatus`, `id`, `roles`, `status`, `presence` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
 							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
-							if(mysqli_num_rows($lfdu2) != 0){
-								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'","profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
+							if(mysqli_num_rows($lfdu2) != 0 and stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) != "cloaked"){
+								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'", "presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'", "profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
 							}
 			  			}					
 					}
