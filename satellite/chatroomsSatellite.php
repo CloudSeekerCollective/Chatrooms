@@ -580,7 +580,7 @@ class Chatroom implements MessageComponentInterface {
 			// goofy system, will rework later on
 			$output = '{"messages":';
 			// if authentication is set...
-			if(!empty($dataset['authentication']) and !empty($dataset['channel']) and $serverconfig['save_messages'] == true){
+			if(!empty($dataset['authentication']) and !empty($dataset['channel']) and $serverconfig['save_messages'] == true and $serverconfig['voice_only'] == false){
 				// isolate authentication
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
 	
