@@ -92,6 +92,27 @@ class Chatroom implements MessageComponentInterface {
 
 				if($utoken == "Anonymous"){
 					$conn->send("Welcome to the Chatrooms Experience!");
+					try{
+						$from->send('{"action":"properties", 
+							"xstatus":"success", 
+							"server_name":"'. $serverconfig['server_name'] .'", 
+							"welcome_message":"'. $serverconfig['welcome_message'] .'", 
+							"save_messages":"'. $serverconfig['save_messages'] .'", 
+							"system_channel":"'. $serverconfig['system_channel'] .'", 
+							"load_all_history_if_any":"'. $serverconfig['load_all_history_if_any'] .'", 
+							"content_id":"'. $serverconfig['content_id'] .'",
+							"require_email":"'. $serverconfig['require_email'] .'",
+							"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
+							"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
+							"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
+							"satellite_version":"0.8",
+							"emotes":'. json_encode($serverconfig['emotes']) .'}');
+					}
+					catch(Exception $e){
+						echo("\n** ERROR! Your chatroom is not set up properly! Make sure you have updated your server properties to match newest version's requirements. **\n
+						Here's what went wrong:\n". var_dump($e));
+						exit;
+					}
 					return;
 				}
 
@@ -582,7 +603,7 @@ class Chatroom implements MessageComponentInterface {
 									while($row = mysqli_fetch_assoc($lfdc)) {
 										$author = stripslashes(htmlspecialchars($row['author']));
 										$channl = stripslashes(htmlspecialchars($row['channel']));
-										$contnt = stripslashes(htmlspecialchars($row['content']));
+										$contnt = $row['content'];
 										$datumo = stripslashes(htmlspecialchars($row['date']));
 										$attach1 = stripslashes(htmlspecialchars($row['attachment1']));
 										$actualid = stripslashes(htmlspecialchars($row['number']));
