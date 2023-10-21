@@ -707,7 +707,7 @@ class Chatroom implements MessageComponentInterface {
 						$uid = stripslashes(htmlspecialchars($dataset['id']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_public_mood`, `presence` FROM `accounts` WHERE `id`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_public_mood`, `presence`, `roles` FROM `accounts` WHERE `id`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
@@ -739,7 +739,7 @@ class Chatroom implements MessageComponentInterface {
 								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":"'. $userroles .'",}');
+								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":"'. $userroles .'"}');
 								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
@@ -780,7 +780,7 @@ class Chatroom implements MessageComponentInterface {
 						$uid = stripslashes(htmlspecialchars($dataset['username']));
 		
 						// lfdu = look for da user
-						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_public_mood`, `presence` FROM `accounts` WHERE `username`='". $uid ."'");
+						$lfdu = mysqli_query($ctds, "SELECT `username`, `picture`, `id`, `status`, `profilestatus`, `creationdate`, `user_public_mood`, `presence`, `roles` FROM `accounts` WHERE `username`='". $uid ."'");
 						
 						// if there is no error...
 						if(!is_bool($lfdu)){
