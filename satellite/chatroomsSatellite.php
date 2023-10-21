@@ -69,6 +69,13 @@ class Chatroom implements MessageComponentInterface {
 			$this->clients->detach($conn);
 			$conn->close();
 		}
+		if(!empty($serverconfig['voice_only']) and $serverconfig['voice_only'] == true)
+		{
+			echo("[Satellite] ATTENTION! The Chatroom is running in VOICE ONLY MODE.\n");
+			echo("[Satellite] ########## This means that there will be only one text channel that does NOT save messages\n");
+			echo("[Satellite] ########## regardless of preferences, and only voice channels will be displayed. Please\n");
+			echo("[Satellite] ########## make sure that the Voice Satellite is running alongside this Satellite.\n");
+		}
 		// if the user did, then do all of this
 		else{
 			// if the client is just checking if the server is available...
@@ -96,6 +103,7 @@ class Chatroom implements MessageComponentInterface {
 						$from->send('{"action":"properties", 
 							"xstatus":"success", 
 							"server_name":"'. $serverconfig['server_name'] .'", 
+       							"voice_only":"'. $serverconfig['voice_only'] .'", 
 							"welcome_message":"'. $serverconfig['welcome_message'] .'", 
 							"save_messages":"'. $serverconfig['save_messages'] .'", 
 							"system_channel":"'. $serverconfig['system_channel'] .'", 
@@ -362,7 +370,12 @@ class Chatroom implements MessageComponentInterface {
 			}*/
 			// isolate information
 			$mesg = stripslashes(htmlspecialchars($dataset['message']));
-			$chnl = stripslashes(htmlspecialchars($dataset['channel']));
+			if($serverconfig['voice_only'] == false){
+				$chnl = stripslashes(htmlspecialchars($dataset['channel']));
+			}
+			else{
+				$chnl = 0;
+			}
 			$attach1 = stripslashes($dataset['attachment1']);
 			// goofy system, will rework later on
 			$output = '{"messages":';
@@ -409,7 +422,7 @@ class Chatroom implements MessageComponentInterface {
 								// if the result is successful...
 								$from->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
 								if($lfdu_RSLT['status'] != "STAGING"){
-									if($serverconfig['save_messages'] == true){
+									if($serverconfig['save_messages'] == true and $serverconfig['voice_only'] == false){
 										// insert into 'messages' table
 										echo("[Satellite] Message saved\n");
 										$query = "INSERT INTO `messages`(`author`, `content`, `channel`, `date`, `number`, `attachment1`) VALUES ('". $id ."',  '". $actual_mesg ."', '". $chnl ."', '". time() ."', '". $mid ."', '". $attach1 ."')";  
@@ -461,7 +474,7 @@ class Chatroom implements MessageComponentInterface {
 			// goofy system, will rework later on
 			$output = '{"messages":';
 			// if authentication is set...
-			if(!empty($dataset['authentication'])){
+			if(!empty($dataset['authentication']) and $serverconfig['voice_only'] == false){
 				// isolate authentication
 				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
 	
