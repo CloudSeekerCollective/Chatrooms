@@ -383,7 +383,7 @@ class Chatroom implements MessageComponentInterface {
 						$lfdc = mysqli_query($ctds, "SELECT * FROM `channels` WHERE `id`='". $chnl ."'");
 						$lfdc_RSLT = mysqli_fetch_assoc($lfdc);
 						$channel_allowed = json_decode($lfdc_RSLT['allowed_roles']);
-						$userroles = json_decode($lfdu_RSLT['roles']);
+						$userroles = $lfdu_RSLT['roles'];
 						$greenlight = false;
 						// isolate username, user ID
 						$usrnm = stripslashes(htmlspecialchars($lfdu_RSLT['username']));
@@ -736,9 +736,10 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
+								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'"}');
+								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":"'. $userroles .'",}');
 								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
@@ -792,7 +793,7 @@ class Chatroom implements MessageComponentInterface {
 										$utoken = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `presence` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
-										if(stripslashes(htmlspecialchars($lfduS_RSLT["username"])) == $uid){
+										if(strtolower(stripslashes(htmlspecialchars($lfduS_RSLT["username"]))) == strtolower($uid)){
 											$upresence = stripslashes(htmlspecialchars($lfduS_RSLT['presence']));
 											$pres = $upresence;
 										}
@@ -808,12 +809,7 @@ class Chatroom implements MessageComponentInterface {
 								$pfp = stripslashes(htmlspecialchars($lfdu_RSLT['picture']));
 								$ustts = "". stripslashes(htmlspecialchars($lfdu_RSLT['profilestatus']));
 								$cdate = /*stripslashes(htmlspecialchars(gmdate("F nS Y, G:i", */$lfdu_RSLT['creationdate'];
-								if(empty($lfdu_RSLT['roles'])){
-									$userroles = "[]";
-								}
-								else{
-									$userroles = $lfdu_RSLT['roles'];
-								}
+								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
 								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":"'. $userroles .'"}');
