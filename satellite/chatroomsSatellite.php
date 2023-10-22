@@ -100,7 +100,7 @@ class Chatroom implements MessageComponentInterface {
 				if($utoken == "Anonymous"){
 					$conn->send("Welcome to the Chatrooms Experience!");
 					try{
-						$from->send('{"action":"properties", 
+						$conn->send('{"action":"properties", 
 							"xstatus":"success", 
 							"server_name":"'. $serverconfig['server_name'] .'", 
        							"voice_only":"'. $serverconfig['voice_only'] .'", 
