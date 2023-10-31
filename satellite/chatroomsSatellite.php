@@ -436,7 +436,8 @@ class Chatroom implements MessageComponentInterface {
 										$lfduSEND = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status` FROM `accounts` WHERE `authentication`='". $utoken ."'");
 										$lfduS_RSLT = mysqli_fetch_assoc($lfduSEND);
 										$userrolesS = json_decode($lfduS_RSLT['roles']);
-										for($i = 0; $i >= $userrolesS; $i++){
+										/* TODO: fix this system, right now it crashes the chatroom
+	  									for($i = 0; $i >= $userrolesS; $i++){
 											echo($userrolesS . " " . $channel_allowed . "\n");
 											if($userrolesS[$i] == $channel_allowed){
 												$greenlight = true;
@@ -444,7 +445,8 @@ class Chatroom implements MessageComponentInterface {
 											else{
 												$greenlight = false;
 											}
-										}
+										}*/
+										$greenlight = true;
 										if($greenlight == true){
 											$client->send('{"action":"message","status":"success", "user":"'. $usrnm .'", "channel":"'. $chnl .'", "uid":"'. $id .'", "msg":"' .  $actual_mesg . '","time":"'. time() .'","msgid":"'. $mid .'","attachment1":"'. $attach1 .'"}');
 											echo("[Satellite] Message by ". stripslashes(htmlspecialchars($usrnm)) ." successfully sent!\n");
