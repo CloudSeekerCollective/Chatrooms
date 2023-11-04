@@ -941,9 +941,54 @@ class Chatroom implements MessageComponentInterface {
 							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `picture`, `profilestatus`, `id`, `roles`, `status`, `presence` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
 							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
 							if(mysqli_num_rows($lfdu2) != 0 and stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) != "cloaked"){
-								$from->send('{"action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'", "presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'", "profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
+								$from->send('{"warning":"Satellite intent ONLINEUSERS is deprecated, use USERLIST instead!", "action":"onlineuser","status":"success", "username":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['username'])) .'", "id":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['id'])) .'", "presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'", "profilestatus":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus'])) .'","presence":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) .'","picture":"'. stripslashes(htmlspecialchars($lfdu2_RSLT['picture'])) .'"}');
 							}
 			  			}					
+					}
+				}
+				else{
+					echo("");
+				}
+			}
+			break;
+			case "userlist":
+				//extraStuff/message_intent();
+				// if theres a message and/or an attachment...
+			// goofy system, will rework later on
+			$output = '{"messages":';
+			// if authentication is set...
+			if(!empty($dataset['authentication'])){
+				//var_dump($this->clients);
+				// isolate authentication
+				$auth = stripslashes(htmlspecialchars($dataset['authentication']));	
+	
+				// lfdu = look for da user
+				$lfdu = mysqli_query($ctds, "SELECT `username`, `id`, `roles`, `status`, `presence` FROM `accounts` WHERE `authentication`='". $auth ."'");
+				
+				// if the result is NOT a boolean (in other words an error)...
+				if(!is_bool($lfdu)){
+					// if the authentication matches a user...
+					
+					if(mysqli_num_rows($lfdu) != 0){
+						$userlist = array();
+						$usercount = 0;
+						foreach($this->clients as $client) {
+							$s_auth = substr(stripslashes(htmlspecialchars($client->httpRequest->getUri()->getQuery())), 5);
+							$lfdu2 = mysqli_query($ctds, "SELECT `username`, `picture`, `profilestatus`, `id`, `roles`, `status`, `presence` FROM `accounts` WHERE `authentication`='". $s_auth ."'");
+							$lfdu2_RSLT = mysqli_fetch_assoc($lfdu2);
+							if(mysqli_num_rows($lfdu2) != 0 and stripslashes(htmlspecialchars($lfdu2_RSLT['presence'])) != "cloaked"){
+								$userinfo = new stdClass;
+								$userinfo->username = stripslashes(htmlspecialchars($lfdu2_RSLT['username']));
+								$userinfo->id = stripslashes(htmlspecialchars($lfdu2_RSLT['id']));
+								$userinfo->presence = stripslashes(htmlspecialchars($lfdu2_RSLT['presence']));
+								$userinfo->profilestatus = stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus']));
+								$userinfo->picture = stripslashes(htmlspecialchars($lfdu2_RSLT['picture']));
+								$userlist[$usercount] = $userinfo;
+								$userlist++;
+							}
+						}
+						$parsed_list = json_encode($userlist);
+						$from->send('{"action":"userlist", "status":"success", "users":'. $parsed_list .'}');
 					}
 				}
 				else{
