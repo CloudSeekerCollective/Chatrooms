@@ -984,7 +984,7 @@ class Chatroom implements MessageComponentInterface {
 								$userinfo->profilestatus = stripslashes(htmlspecialchars($lfdu2_RSLT['profilestatus']));
 								$userinfo->picture = stripslashes(htmlspecialchars($lfdu2_RSLT['picture']));
 								$userlist[$usercount] = $userinfo;
-								$userlist++;
+								$usercount++;
 							}
 						}
 						$parsed_list = json_encode($userlist);
