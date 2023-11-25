@@ -1478,8 +1478,13 @@ class Chatroom implements MessageComponentInterface {
 								}
   							}
 							if($ok == true){
-								$from->send('{"action":"editprofile", "status":"success"}');
-								$lfdu = mysqli_query($ctds, "UPDATE `accounts` SET `username`='". $username ."' WHERE `authentication`='". $auth ."'");
+								if(strlen($username) < 40){
+									$from->send('{"action":"editprofile", "status":"success"}');
+									$lfdu = mysqli_query($ctds, "UPDATE `accounts` SET `username`='". $username ."' WHERE `authentication`='". $auth ."'");
+								}
+								else{
+									$from->send('{"action":"editprofile", "status":"fail", "error":"Username too long..."}');
+								}
 							}
 						}
 					}
@@ -1509,8 +1514,13 @@ class Chatroom implements MessageComponentInterface {
 					// if the authentication matches a user...
 						if(mysqli_num_rows($lfdu) != 0){
 							// if the result is successful...
-							$from->send('{"action":"editprofile", "status":"success"}');
-							$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `profilestatus`='". $status ."' WHERE `authentication`='". $auth ."'");
+							if(strlen($status) < 128){
+								$from->send('{"action":"editprofile", "status":"success"}');
+								$lfdpfp = mysqli_query($ctds, "UPDATE `accounts` SET `profilestatus`='". $status ."' WHERE `authentication`='". $auth ."'");
+							}
+							else{
+								$from->send('{"action":"editprofile", "status":"fail", "error":"Status too long..."}');
+							}
 						}
 					}
 					else{
