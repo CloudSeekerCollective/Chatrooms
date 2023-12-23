@@ -14,7 +14,5 @@ You may also need to create a folder named "userstore" in the webserver root.
 ### Client-side configuration
 Go to the root of your webserver and place the `serverproperties.json` example in there. Again, configure everything you need to get everything up and running.
 ### Email configuration
-![Headers](https://github.com/PopularTopplingJelly/Chatrooms/blob/main/.webassets/2023-01-01_14-26.png?raw=true)
-
-You need to change this line in `/chatrooms/login/step1/index.php` and `/chatrooms/login/step1/index.php` with the email you want to use to send emails. Make sure you have a mailserver set in your php.ini before using the email functionality!
+Make sure you have a mailserver set in your `php.ini` and an administrator email set in your `serverproperties.json` in order to use the email verification for your Chatroom!
 ### You're done! You just need to start the Satellite and your webserver to get your Chatroom up and running.
