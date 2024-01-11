@@ -113,7 +113,7 @@ class Chatroom implements MessageComponentInterface {
 							"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
 							"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
 							"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
-							"satellite_version":"0.8",
+							"satellite_version":"0.8.1",
 							"emotes":'. json_encode($serverconfig['emotes']) .'}');
 					}
 					catch(Exception $e){
@@ -685,7 +685,7 @@ class Chatroom implements MessageComponentInterface {
 						"allow_registrations":"'. $serverconfig['allow_registrations'] .'",
 						"filesize_limit":"'. $serverconfig['filesize_limit'] .'",
 						"chatrooms_distro":"'. $serverconfig['chatrooms_distro'] .'",
-						"satellite_version":"0.8",
+						"satellite_version":"0.8.1",
 						"emotes":'. json_encode($serverconfig['emotes']) .'}');
 				}
 				catch(Exception $e){
@@ -754,7 +754,13 @@ class Chatroom implements MessageComponentInterface {
 								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":'. $userroles .'}');
+								if(!empty($dataset['silent']){
+								   $silent = stripslashes(htmlspecialchars($dataset['silent']);
+								}
+								else{
+								   $silent = false;
+								}
+								$from->send('{"action":"user", "xstatus":"success", "silent": "'. $silent .'", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":'. $userroles .'}');
 								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
@@ -827,7 +833,13 @@ class Chatroom implements MessageComponentInterface {
 								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								$from->send('{"action":"user", "xstatus":"success", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":'. $userroles .'}');
+								if(!empty($dataset['silent']){
+								   $silent = stripslashes(htmlspecialchars($dataset['silent']);
+								}
+								else{
+								   $silent = false;
+								}
+								$from->send('{"action":"user", "xstatus":"success", "silent":"'. $silent .'", "username":"'. $usrnm .'", "id":"'. $actualuid .'", "status":"'. $stts .'", "picture":"'. $pfp .'", "profilestatus":"'. $ustts .'", "mood":"'. $mood .'", "presence":"'. $pres .'", "creationDate":"'. $cdate .'", "roles":'. $userroles .'}');
 								// disable unnecessary log: echo(json_encode(array("username" => $usrnm, "id" => $actualuid, "status" => $stts, "picture" => $pfp, "profilestatus" => $ustts, "creationDate" => $cdate/*, "lastLoginDate" => $lldate*/)));
 							}
 							// otherwise...
