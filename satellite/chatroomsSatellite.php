@@ -754,7 +754,7 @@ class Chatroom implements MessageComponentInterface {
 								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								if(!empty($dataset['silent']){
+								if(!empty($dataset['silent'])){
 								   $silent = stripslashes(htmlspecialchars($dataset['silent']);
 								}
 								else{
@@ -833,7 +833,7 @@ class Chatroom implements MessageComponentInterface {
 								$userroles = $lfdu_RSLT['roles'];
 								// COMING SOON: $lldate = stripslashes(htmlspecialchars(gm_date($lfdu_RSLT['lastlogindate'])));
 								// return user info
-								if(!empty($dataset['silent']){
+								if(!empty($dataset['silent'])){
 								   $silent = stripslashes(htmlspecialchars($dataset['silent']);
 								}
 								else{
